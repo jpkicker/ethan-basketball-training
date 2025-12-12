@@ -1,0 +1,2402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0a0a0a">
+    <title>Ethan's Basketball Training</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏀</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0a0a;
+            --bg-card: #141414;
+            --bg-elevated: #1a1a1a;
+            --accent: #ff6b2c;
+            --accent-glow: rgba(255, 107, 44, 0.25);
+            --accent-dim: #cc5523;
+            --coach: #3b82f6;
+            --varsity: #8b5cf6;
+            --shooting: #10b981;
+            --pickup: #f59e0b;
+            --custom: #ec4899;
+            --game: #ef4444;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --text-muted: #505050;
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Barlow', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            min-height: 100dvh;
+            overflow-x: hidden;
+            padding-bottom: calc(70px + var(--safe-bottom));
+        }
+
+        /* Views */
+        .view {
+            display: none;
+            padding: 1rem;
+            padding-bottom: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Header */
+        .view-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-top: 0.5rem;
+        }
+
+        .view-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            letter-spacing: 0.02em;
+        }
+
+        .view-title span {
+            color: var(--accent);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-subtle);
+            display: flex;
+            justify-content: space-around;
+            padding: 0.5rem 0;
+            padding-bottom: calc(0.5rem + var(--safe-bottom));
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.5rem 1rem;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Barlow', sans-serif;
+        }
+
+        .nav-item.active {
+            color: var(--accent);
+        }
+
+        .nav-item svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .nav-item span {
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .card-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Stats chips */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-chip {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            padding: 0.75rem;
+            text-align: center;
+        }
+
+        .stat-chip .value {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.6rem;
+            color: var(--accent);
+            line-height: 1;
+        }
+
+        .stat-chip .label {
+            font-size: 0.6rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 0.25rem;
+        }
+
+        /* Calendar mini */
+        .calendar-mini {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .calendar-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .calendar-nav button {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-primary);
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .calendar-month {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.2rem;
+        }
+
+        .today-btn {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 0.4rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+        }
+
+        .calendar-day-header {
+            padding: 0.5rem;
+            text-align: center;
+            font-size: 0.6rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .calendar-day:hover {
+            background: var(--bg-elevated);
+        }
+
+        .calendar-day.other-month {
+            opacity: 0.3;
+        }
+
+        .calendar-day.selected {
+            background: var(--bg-elevated);
+            box-shadow: inset 0 0 0 2px var(--accent);
+        }
+
+        .calendar-day.today .day-num {
+            background: var(--accent);
+            color: var(--bg-dark);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .calendar-day.game-day {
+            background: rgba(239, 68, 68, 0.15);
+        }
+
+        .day-num {
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .day-dots {
+            display: flex;
+            gap: 2px;
+            margin-top: 2px;
+        }
+
+        .day-dot {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+        }
+
+        .day-dot.planned { background: var(--accent); opacity: 0.5; }
+        .day-dot.completed { background: var(--success); }
+        .day-dot.missed { background: var(--game); }
+
+        /* Training blocks */
+        .training-block {
+            background: var(--bg-elevated);
+            border-radius: 10px;
+            margin-bottom: 0.75rem;
+            border: 1px solid var(--border-subtle);
+            overflow: hidden;
+        }
+
+        .training-block.fixed {
+            opacity: 0.7;
+        }
+
+        .block-header {
+            display: flex;
+            align-items: center;
+            padding: 0.875rem;
+            gap: 0.75rem;
+        }
+
+        .block-color {
+            width: 4px;
+            height: 40px;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        .block-color.coach { background: var(--coach); }
+        .block-color.varsity { background: var(--varsity); }
+        .block-color.shooting { background: var(--shooting); }
+        .block-color.pickup { background: var(--pickup); }
+        .block-color.custom { background: var(--custom); }
+
+        .block-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .block-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.125rem;
+        }
+
+        .block-time {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .block-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-badge {
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .status-badge.planned {
+            background: rgba(255, 107, 44, 0.2);
+            color: var(--accent);
+        }
+
+        .status-badge.completed {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+
+        .status-badge.missed {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--game);
+        }
+
+        .block-check {
+            width: 28px;
+            height: 28px;
+            border: 2px solid var(--text-muted);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .block-check.checked {
+            background: var(--success);
+            border-color: var(--success);
+        }
+
+        .block-check svg {
+            width: 16px;
+            height: 16px;
+            opacity: 0;
+        }
+
+        .block-check.checked svg {
+            opacity: 1;
+        }
+
+        /* Planned vs Actual comparison */
+        .comparison-row {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 0.5rem;
+            align-items: center;
+            padding: 0.75rem;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .comparison-label {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        .comparison-value {
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        .comparison-value.planned { color: var(--text-secondary); }
+        .comparison-value.actual { color: var(--text-primary); }
+
+        .comparison-icon {
+            font-size: 1rem;
+        }
+
+        /* Shooting counter */
+        .shooting-counter {
+            padding: 0.875rem;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .counter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .counter-value {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.3rem;
+        }
+
+        .counter-value span { color: var(--shooting); }
+
+        .counter-bar {
+            height: 6px;
+            background: var(--bg-dark);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .counter-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--shooting), #34d399);
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+
+        .counter-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .counter-btn {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid var(--border-subtle);
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .counter-btn.primary {
+            background: var(--shooting);
+            border-color: var(--shooting);
+            color: var(--bg-dark);
+        }
+
+        /* Plan Week View */
+        .week-day-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            margin-bottom: 0.75rem;
+            overflow: hidden;
+        }
+
+        .week-day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background: var(--bg-elevated);
+            cursor: pointer;
+        }
+
+        .week-day-name {
+            font-weight: 600;
+        }
+
+        .week-day-date {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .week-day-content {
+            padding: 0.75rem;
+        }
+
+        .week-day-content.collapsed {
+            display: none;
+        }
+
+        .fixed-event {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: var(--bg-dark);
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            opacity: 0.6;
+        }
+
+        .fixed-event .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .fixed-event span {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .planned-events {
+            margin-top: 0.5rem;
+        }
+
+        .planned-event {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.6rem 0.75rem;
+            background: var(--bg-elevated);
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            border-left: 3px solid var(--accent);
+        }
+
+        .planned-event-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .planned-event-time {
+            font-size: 0.75rem;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .planned-event-name {
+            font-size: 0.85rem;
+        }
+
+        .planned-event-remove {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 0.25rem;
+        }
+
+        .add-activity-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            padding: 0.6rem;
+            background: transparent;
+            border: 1px dashed var(--border-subtle);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .add-activity-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* Stats View */
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .stat-card-title {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-big-number {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem;
+            line-height: 1;
+            color: var(--accent);
+        }
+
+        .stat-big-number small {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .progress-ring {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 1rem;
+        }
+
+        .progress-ring circle {
+            fill: none;
+            stroke-width: 8;
+        }
+
+        .progress-ring .bg {
+            stroke: var(--bg-dark);
+        }
+
+        .progress-ring .progress {
+            stroke: var(--accent);
+            stroke-linecap: round;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+            transition: stroke-dashoffset 0.5s ease;
+        }
+
+        .weekly-bars {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 100px;
+            padding-top: 1rem;
+        }
+
+        .weekly-bar {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .bar-fill {
+            width: 20px;
+            background: var(--accent);
+            border-radius: 4px 4px 0 0;
+            transition: height 0.3s;
+        }
+
+        .bar-label {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+        }
+
+        /* Modals */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 200;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--bg-card);
+            border-radius: 20px 20px 0 0;
+            padding: 1.5rem;
+            width: 100%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .modal-handle {
+            width: 40px;
+            height: 4px;
+            background: var(--text-muted);
+            border-radius: 2px;
+            margin: 0 auto 1rem;
+        }
+
+        .modal h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: 'Barlow', sans-serif;
+            font-size: 1rem;
+        }
+
+        .form-select {
+            cursor: pointer;
+        }
+
+        .activity-type-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .activity-type-btn {
+            padding: 0.75rem;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .activity-type-btn.selected {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(255, 107, 44, 0.1);
+        }
+
+        .activity-type-btn .icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-type-btn .label {
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 0.875rem;
+            border-radius: 8px;
+            font-family: 'Barlow', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: var(--bg-dark);
+        }
+
+        .btn-secondary {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+        }
+
+        /* Notification permission banner */
+        .notification-banner {
+            background: linear-gradient(135deg, var(--accent-dim), var(--accent));
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .notification-banner.hidden {
+            display: none;
+        }
+
+        .notification-banner-icon {
+            font-size: 1.5rem;
+        }
+
+        .notification-banner-text {
+            flex: 1;
+        }
+
+        .notification-banner-text h4 {
+            font-size: 0.9rem;
+            margin-bottom: 0.125rem;
+        }
+
+        .notification-banner-text p {
+            font-size: 0.75rem;
+            opacity: 0.9;
+        }
+
+        .notification-banner button {
+            background: rgba(0,0,0,0.2);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: var(--text-muted);
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state-text {
+            font-size: 0.9rem;
+        }
+
+        /* Legend */
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 0.75rem;
+            justify-content: center;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+        }
+
+        .legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        /* Guide View Styles */
+        .guide-intro {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .guide-intro .guide-icon {
+            font-size: 2rem;
+        }
+
+        .guide-intro p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .guide-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .guide-section.highlight {
+            border-color: var(--accent);
+            background: linear-gradient(135deg, rgba(255, 107, 44, 0.05), transparent);
+        }
+
+        .guide-section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: var(--bg-elevated);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .guide-number {
+            width: 28px;
+            height: 28px;
+            background: var(--accent);
+            color: var(--bg-dark);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .guide-section-header h3 {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .guide-content {
+            padding: 1rem;
+        }
+
+        .guide-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .guide-list > li {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        .guide-list > li:last-child {
+            margin-bottom: 0;
+        }
+
+        .guide-list ul {
+            list-style: none;
+            padding-left: 1.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .guide-list ul li {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+            position: relative;
+        }
+
+        .guide-list ul li::before {
+            content: "•";
+            position: absolute;
+            left: -1rem;
+            color: var(--text-muted);
+        }
+
+        .guide-check {
+            color: var(--accent);
+            flex-shrink: 0;
+        }
+
+        .guide-tip {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background: rgba(255, 107, 44, 0.1);
+            border-radius: 8px;
+            font-size: 0.8rem;
+            color: var(--accent);
+        }
+
+        .success-keys {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .success-key {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: var(--bg-elevated);
+            border-radius: 8px;
+        }
+
+        .key-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .key-text {
+            display: flex;
+            flex-direction: column;
+            gap: 0.125rem;
+        }
+
+        .key-text strong {
+            font-size: 0.9rem;
+        }
+
+        .key-text span {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .guide-fixed-schedule {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .guide-fixed-schedule h4 {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
+        }
+
+        .fixed-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0;
+            font-size: 0.85rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .fixed-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .fixed-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- TODAY VIEW -->
+    <div id="view-today" class="view active">
+        <div class="view-header">
+            <h1 class="view-title">TODAY<span>'</span>S TRAINING</h1>
+        </div>
+
+        <div id="notification-banner" class="notification-banner hidden">
+            <span class="notification-banner-icon">🔔</span>
+            <div class="notification-banner-text">
+                <h4>Enable Reminders</h4>
+                <p>Get notified before your training</p>
+            </div>
+            <button onclick="requestNotifications()">Enable</button>
+        </div>
+
+        <div class="stats-row">
+            <div class="stat-chip">
+                <div class="value" id="today-streak">0</div>
+                <div class="label">Day Streak</div>
+            </div>
+            <div class="stat-chip">
+                <div class="value" id="today-makes">0</div>
+                <div class="label">Makes Today</div>
+            </div>
+            <div class="stat-chip">
+                <div class="value" id="today-completion">0%</div>
+                <div class="label">Completed</div>
+            </div>
+        </div>
+
+        <div id="today-schedule"></div>
+    </div>
+
+    <!-- CALENDAR VIEW -->
+    <div id="view-calendar" class="view">
+        <div class="view-header">
+            <h1 class="view-title">CALENDAR</h1>
+        </div>
+
+        <div class="calendar-mini">
+            <div class="calendar-header">
+                <div class="calendar-nav">
+                    <button onclick="changeMonth(-1)">‹</button>
+                    <span class="calendar-month" id="calendar-month">December 2024</span>
+                    <button onclick="changeMonth(1)">›</button>
+                </div>
+                <button class="today-btn" onclick="goToToday()">Today</button>
+            </div>
+            <div class="calendar-grid" id="calendar-grid"></div>
+            <div class="legend">
+                <div class="legend-item"><div class="legend-dot" style="background: var(--success)"></div> Completed</div>
+                <div class="legend-item"><div class="legend-dot" style="background: var(--accent); opacity: 0.5"></div> Planned</div>
+                <div class="legend-item"><div class="legend-dot" style="background: var(--game)"></div> Game Day</div>
+            </div>
+        </div>
+
+        <div id="calendar-day-detail"></div>
+    </div>
+
+    <!-- PLAN WEEK VIEW -->
+    <div id="view-plan" class="view">
+        <div class="view-header">
+            <h1 class="view-title">PLAN <span>WEEK</span></h1>
+        </div>
+
+        <div id="week-planner"></div>
+    </div>
+
+    <!-- GUIDE VIEW -->
+    <div id="view-guide" class="view">
+        <div class="view-header">
+            <h1 class="view-title">DAILY <span>GUIDE</span></h1>
+        </div>
+
+        <div class="guide-intro card">
+            <div class="guide-icon">📋</div>
+            <p>Follow this routine to get the most out of your training tracker.</p>
+        </div>
+
+        <div class="guide-section">
+            <div class="guide-section-header">
+                <span class="guide-number">1</span>
+                <h3>Sunday Night: Plan Your Week</h3>
+            </div>
+            <div class="guide-content">
+                <ul class="guide-list">
+                    <li><span class="guide-check">☐</span> Go to the <strong>Plan</strong> tab</li>
+                    <li><span class="guide-check">☐</span> For each day, add your planned activities:
+                        <ul>
+                            <li>When you'll do your <strong>200 makes</strong></li>
+                            <li>Any <strong>pickup runs</strong> (location + time)</li>
+                            <li>Any <strong>custom training</strong></li>
+                        </ul>
+                    </li>
+                    <li><span class="guide-check">☐</span> Mark any <strong>game days</strong> (no varsity practice)</li>
+                </ul>
+                <div class="guide-tip">
+                    <span>💡</span> Planning ahead helps you stay accountable and builds consistency.
+                </div>
+            </div>
+        </div>
+
+        <div class="guide-section">
+            <div class="guide-section-header">
+                <span class="guide-number">2</span>
+                <h3>Every Morning: Check Today's Plan</h3>
+            </div>
+            <div class="guide-content">
+                <ul class="guide-list">
+                    <li><span class="guide-check">☐</span> Open the app and check the <strong>Today</strong> tab</li>
+                    <li><span class="guide-check">☐</span> Review what's scheduled for the day</li>
+                    <li><span class="guide-check">☐</span> Make sure notifications are enabled for reminders</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="guide-section">
+            <div class="guide-section-header">
+                <span class="guide-number">3</span>
+                <h3>After Each Activity: Log Completion</h3>
+            </div>
+            <div class="guide-content">
+                <ul class="guide-list">
+                    <li><span class="guide-check">☐</span> <strong>Coach Sessions:</strong> Tap the checkbox when done</li>
+                    <li><span class="guide-check">☐</span> <strong>Varsity Practice:</strong> Tap the checkbox when done</li>
+                    <li><span class="guide-check">☐</span> <strong>200 Makes:</strong> Use the +1/+10 buttons as you shoot
+                        <ul>
+                            <li>The app auto-records your completion time when you hit 200</li>
+                        </ul>
+                    </li>
+                    <li><span class="guide-check">☐</span> <strong>Pickup Runs / Custom:</strong> Tap the checkbox and enter completion time</li>
+                </ul>
+                <div class="guide-tip">
+                    <span>⏱️</span> Log immediately after finishing for accurate time tracking!
+                </div>
+            </div>
+        </div>
+
+        <div class="guide-section">
+            <div class="guide-section-header">
+                <span class="guide-number">4</span>
+                <h3>End of Day: Quick Review</h3>
+            </div>
+            <div class="guide-content">
+                <ul class="guide-list">
+                    <li><span class="guide-check">☐</span> Check your completion percentage in <strong>Today</strong> tab</li>
+                    <li><span class="guide-check">☐</span> Make sure all activities are logged</li>
+                    <li><span class="guide-check">☐</span> Note any missed activities to reschedule</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="guide-section">
+            <div class="guide-section-header">
+                <span class="guide-number">5</span>
+                <h3>Weekly: Check Your Progress</h3>
+            </div>
+            <div class="guide-content">
+                <ul class="guide-list">
+                    <li><span class="guide-check">☐</span> Visit the <strong>Stats</strong> tab</li>
+                    <li><span class="guide-check">☐</span> Review your:
+                        <ul>
+                            <li><strong>Streak</strong> – consecutive days with 200 makes</li>
+                            <li><strong>Weekly completion %</strong> – planned vs done</li>
+                            <li><strong>Consistency score</strong> – on-time completion</li>
+                        </ul>
+                    </li>
+                    <li><span class="guide-check">☐</span> Adjust next week's plan based on results</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="guide-section highlight">
+            <div class="guide-section-header">
+                <span class="guide-number">⭐</span>
+                <h3>Keys to Success</h3>
+            </div>
+            <div class="guide-content">
+                <div class="success-keys">
+                    <div class="success-key">
+                        <div class="key-icon">🎯</div>
+                        <div class="key-text">
+                            <strong>Be Specific</strong>
+                            <span>Plan exact times, not "sometime today"</span>
+                        </div>
+                    </div>
+                    <div class="success-key">
+                        <div class="key-icon">📱</div>
+                        <div class="key-text">
+                            <strong>Log Immediately</strong>
+                            <span>Track right after completing each activity</span>
+                        </div>
+                    </div>
+                    <div class="success-key">
+                        <div class="key-icon">🔥</div>
+                        <div class="key-text">
+                            <strong>Protect Your Streak</strong>
+                            <span>200 makes every day, no exceptions</span>
+                        </div>
+                    </div>
+                    <div class="success-key">
+                        <div class="key-icon">📊</div>
+                        <div class="key-text">
+                            <strong>Review Weekly</strong>
+                            <span>Learn from your data and adjust</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="guide-fixed-schedule">
+            <h4>Your Fixed Schedule (Auto-Tracked)</h4>
+            <div class="fixed-item">
+                <span class="fixed-dot" style="background: var(--coach);"></span>
+                <span>Coach Sessions: Mon/Wed/Fri 5-7 AM</span>
+            </div>
+            <div class="fixed-item">
+                <span class="fixed-dot" style="background: var(--varsity);"></span>
+                <span>Varsity Practice: Mon-Fri 3:30-5:30 PM</span>
+            </div>
+            <div class="fixed-item">
+                <span class="fixed-dot" style="background: var(--shooting);"></span>
+                <span>200 Makes: Every day (you pick the time)</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- STATS VIEW -->
+    <div id="view-stats" class="view">
+        <div class="view-header">
+            <h1 class="view-title">YOUR <span>STATS</span></h1>
+        </div>
+
+        <div class="stats-row">
+            <div class="stat-chip">
+                <div class="value" id="stats-streak">0</div>
+                <div class="label">Day Streak</div>
+            </div>
+            <div class="stat-chip">
+                <div class="value" id="stats-total-makes">0</div>
+                <div class="label">Total Makes</div>
+            </div>
+            <div class="stat-chip">
+                <div class="value" id="stats-sessions">0</div>
+                <div class="label">Sessions</div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-card-header">
+                <span class="stat-card-title">This Week's Completion</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 1.5rem;">
+                <svg class="progress-ring" viewBox="0 0 120 120">
+                    <circle class="bg" cx="60" cy="60" r="52"/>
+                    <circle class="progress" id="completion-ring" cx="60" cy="60" r="52"
+                        stroke-dasharray="327" stroke-dashoffset="327"/>
+                </svg>
+                <div>
+                    <div class="stat-big-number" id="week-completion-pct">0<small>%</small></div>
+                    <div style="font-size: 0.8rem; color: var(--text-secondary);">of planned activities</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-card-header">
+                <span class="stat-card-title">Weekly Makes</span>
+            </div>
+            <div class="weekly-bars" id="weekly-bars"></div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-card-header">
+                <span class="stat-card-title">Consistency Score</span>
+            </div>
+            <div class="stat-big-number" id="consistency-score">0<small>%</small></div>
+            <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.25rem;">
+                Activities completed on time
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="bottom-nav">
+        <button class="nav-item active" onclick="switchView('today')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+            </svg>
+            <span>Today</span>
+        </button>
+        <button class="nav-item" onclick="switchView('calendar')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                <line x1="16" y1="2" x2="16" y2="6"/>
+                <line x1="8" y1="2" x2="8" y2="6"/>
+                <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+            <span>Calendar</span>
+        </button>
+        <button class="nav-item" onclick="switchView('plan')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+            <span>Plan</span>
+        </button>
+        <button class="nav-item" onclick="switchView('stats')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="20" x2="18" y2="10"/>
+                <line x1="12" y1="20" x2="12" y2="4"/>
+                <line x1="6" y1="20" x2="6" y2="14"/>
+            </svg>
+            <span>Stats</span>
+        </button>
+        <button class="nav-item" onclick="switchView('guide')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            <span>Guide</span>
+        </button>
+    </nav>
+
+    <!-- ADD ACTIVITY MODAL -->
+    <div class="modal-overlay" id="add-activity-modal">
+        <div class="modal">
+            <div class="modal-handle"></div>
+            <h3>Add Activity</h3>
+
+            <div class="activity-type-grid">
+                <div class="activity-type-btn selected" data-type="shooting" onclick="selectActivityType('shooting')">
+                    <div class="icon">🎯</div>
+                    <div class="label">200 Makes</div>
+                </div>
+                <div class="activity-type-btn" data-type="pickup" onclick="selectActivityType('pickup')">
+                    <div class="icon">🏃</div>
+                    <div class="label">Pickup Run</div>
+                </div>
+                <div class="activity-type-btn" data-type="custom" onclick="selectActivityType('custom')">
+                    <div class="icon">⚡</div>
+                    <div class="label">Custom</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Time</label>
+                <input type="time" class="form-input" id="activity-time" value="16:00">
+            </div>
+
+            <div class="form-group" id="location-group" style="display: none;">
+                <label class="form-label">Location</label>
+                <select class="form-select" id="activity-location">
+                    <option value="LA Fitness">LA Fitness</option>
+                    <option value="Community Rec Center">Community Rec Center</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="custom-name-group" style="display: none;">
+                <label class="form-label">Activity Name</label>
+                <input type="text" class="form-input" id="activity-name" placeholder="e.g., Extra ball handling">
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeAddActivityModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveActivity()">Add Activity</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- COMPLETE ACTIVITY MODAL -->
+    <div class="modal-overlay" id="complete-activity-modal">
+        <div class="modal">
+            <div class="modal-handle"></div>
+            <h3>Log Completion</h3>
+
+            <div class="form-group">
+                <label class="form-label">Actual Time Completed</label>
+                <input type="time" class="form-input" id="completion-time">
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeCompleteModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="confirmCompletion()">Mark Complete</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============ STATE ============
+        let currentView = 'today';
+        let currentDate = new Date();
+        let selectedDate = new Date();
+        let trainingData = {};
+        let selectedActivityType = 'shooting';
+        let currentPlanningDate = null;
+        let currentCompletingActivity = null;
+
+        // Fixed schedule
+        const coachDays = [1, 3, 5]; // Mon, Wed, Fri
+        const varsityDays = [1, 2, 3, 4, 5]; // Mon-Fri
+
+        // ============ INITIALIZATION ============
+        function init() {
+            loadData();
+            checkNotificationPermission();
+            renderCurrentView();
+            scheduleNotifications();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('ethanTrainingV3');
+            if (saved) {
+                trainingData = JSON.parse(saved);
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem('ethanTrainingV3', JSON.stringify(trainingData));
+        }
+
+        // ============ DATE HELPERS ============
+        function getDateKey(date) {
+            const d = new Date(date);
+            return d.toISOString().split('T')[0];
+        }
+
+        function getDayData(date) {
+            const key = getDateKey(date);
+            if (!trainingData[key]) {
+                trainingData[key] = {
+                    isGameDay: false,
+                    planned: { shooting: null, pickupRuns: [], custom: [] },
+                    actual: {
+                        shootingMakes: 0,
+                        shootingCompletedAt: null,
+                        pickupRuns: [],
+                        custom: [],
+                        coachSkills: false,
+                        coachWeights: false,
+                        varsity: false
+                    }
+                };
+            }
+            // Ensure planned structure exists
+            if (!trainingData[key].planned) {
+                trainingData[key].planned = { shooting: null, pickupRuns: [], custom: [] };
+            }
+            if (!trainingData[key].actual) {
+                trainingData[key].actual = {
+                    shootingMakes: 0,
+                    shootingCompletedAt: null,
+                    pickupRuns: [],
+                    custom: [],
+                    coachSkills: false,
+                    coachWeights: false,
+                    varsity: false
+                };
+            }
+            return trainingData[key];
+        }
+
+        function formatTime(time24) {
+            if (!time24) return '';
+            const [hours, minutes] = time24.split(':');
+            const h = parseInt(hours);
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            const h12 = h % 12 || 12;
+            return `${h12}:${minutes} ${ampm}`;
+        }
+
+        // ============ VIEW SWITCHING ============
+        function switchView(view) {
+            currentView = view;
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById(`view-${view}`).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach((n, i) => {
+                n.classList.toggle('active', ['today', 'calendar', 'plan', 'stats', 'guide'][i] === view);
+            });
+            renderCurrentView();
+        }
+
+        function renderCurrentView() {
+            switch(currentView) {
+                case 'today': renderTodayView(); break;
+                case 'calendar': renderCalendarView(); break;
+                case 'plan': renderPlanView(); break;
+                case 'stats': renderStatsView(); break;
+            }
+        }
+
+        // ============ TODAY VIEW ============
+        function renderTodayView() {
+            const today = new Date();
+            const dayData = getDayData(today);
+            const dow = today.getDay();
+
+            // Update stats
+            document.getElementById('today-streak').textContent = calculateStreak();
+            document.getElementById('today-makes').textContent = dayData.actual.shootingMakes || 0;
+            document.getElementById('today-completion').textContent = calculateDayCompletion(today) + '%';
+
+            const container = document.getElementById('today-schedule');
+            let html = '';
+
+            const hasCoach = coachDays.includes(dow) && !dayData.isGameDay;
+            const hasVarsity = varsityDays.includes(dow) && !dayData.isGameDay;
+
+            // Game day toggle
+            html += `
+                <div class="card" style="margin-bottom: 0.75rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 0.85rem;">Mark as Game Day</span>
+                        <label style="position: relative; display: inline-block; width: 50px; height: 28px;">
+                            <input type="checkbox" ${dayData.isGameDay ? 'checked' : ''}
+                                onchange="toggleGameDay()"
+                                style="opacity: 0; width: 0; height: 0;">
+                            <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+                                background: ${dayData.isGameDay ? 'var(--game)' : 'var(--bg-dark)'};
+                                border-radius: 28px; transition: 0.3s;">
+                                <span style="position: absolute; height: 22px; width: 22px; left: ${dayData.isGameDay ? '25px' : '3px'};
+                                    bottom: 3px; background: white; border-radius: 50%; transition: 0.3s;"></span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+            `;
+
+            // Coach sessions
+            if (hasCoach) {
+                html += renderFixedBlock('Basketball Skills', '5:00 - 6:00 AM', 'coach',
+                    dayData.actual.coachSkills, () => toggleFixed('coachSkills'));
+                html += renderFixedBlock('Weight Training', '6:00 - 7:00 AM', 'coach',
+                    dayData.actual.coachWeights, () => toggleFixed('coachWeights'));
+            }
+
+            // Varsity
+            if (hasVarsity) {
+                html += renderFixedBlock('Varsity Practice', '3:30 - 5:30 PM', 'varsity',
+                    dayData.actual.varsity, () => toggleFixed('varsity'));
+            }
+
+            // Game day notice
+            if (dayData.isGameDay) {
+                html += `
+                    <div class="training-block" style="border-color: var(--game);">
+                        <div class="block-header">
+                            <div class="block-color" style="background: var(--game);"></div>
+                            <div class="block-info">
+                                <div class="block-title" style="color: var(--game);">🏀 Game Day!</div>
+                                <div class="block-time">Focus on game prep and rest</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // 200 Makes shooting
+            html += renderShootingBlock(dayData);
+
+            // Planned pickup runs
+            if (dayData.planned.pickupRuns && dayData.planned.pickupRuns.length > 0) {
+                dayData.planned.pickupRuns.forEach((run, idx) => {
+                    const actual = dayData.actual.pickupRuns?.[idx];
+                    html += renderPlannedActivity('Pickup Run', run.location, run.time, actual, 'pickup', idx);
+                });
+            }
+
+            // Planned custom activities
+            if (dayData.planned.custom && dayData.planned.custom.length > 0) {
+                dayData.planned.custom.forEach((activity, idx) => {
+                    const actual = dayData.actual.custom?.[idx];
+                    html += renderPlannedActivity(activity.name, '', activity.time, actual, 'custom', idx);
+                });
+            }
+
+            // Add activity button
+            html += `
+                <button class="add-activity-btn" onclick="openAddActivityModal('${getDateKey(today)}')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                    Add Activity
+                </button>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        function renderFixedBlock(title, time, type, completed, onToggle) {
+            return `
+                <div class="training-block ${completed ? '' : 'fixed'}">
+                    <div class="block-header">
+                        <div class="block-color ${type}"></div>
+                        <div class="block-info">
+                            <div class="block-title">${title}</div>
+                            <div class="block-time">${time}</div>
+                        </div>
+                        <div class="block-check ${completed ? 'checked' : ''}" onclick="${onToggle.toString().match(/toggleFixed\('[^']+'\)/)[0]}">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderShootingBlock(dayData) {
+            const planned = dayData.planned.shooting;
+            const makes = dayData.actual.shootingMakes || 0;
+            const completed = makes >= 200;
+            const actualTime = dayData.actual.shootingCompletedAt;
+
+            let statusHtml = '';
+            if (planned) {
+                if (completed && actualTime) {
+                    const timeDiff = getTimeDiffMinutes(planned.time, actualTime);
+                    if (Math.abs(timeDiff) <= 30) {
+                        statusHtml = '<span class="status-badge completed">✓ On Time</span>';
+                    } else {
+                        statusHtml = '<span class="status-badge" style="background: rgba(245,158,11,0.2); color: var(--warning);">⚠ ' + formatTime(actualTime) + '</span>';
+                    }
+                } else if (!completed) {
+                    statusHtml = '<span class="status-badge planned">Planned ' + formatTime(planned.time) + '</span>';
+                }
+            }
+
+            return `
+                <div class="training-block ${completed ? '' : ''}">
+                    <div class="block-header">
+                        <div class="block-color shooting"></div>
+                        <div class="block-info">
+                            <div class="block-title">Daily Shooting - 200 Makes</div>
+                            <div class="block-time">${planned ? 'Planned: ' + formatTime(planned.time) : 'Flexible timing'}</div>
+                        </div>
+                        <div class="block-status">${statusHtml}</div>
+                    </div>
+                    <div class="shooting-counter">
+                        <div class="counter-header">
+                            <span style="font-size: 0.8rem; color: var(--text-secondary);">Makes</span>
+                            <span class="counter-value"><span>${makes}</span> / 200</span>
+                        </div>
+                        <div class="counter-bar">
+                            <div class="counter-fill" style="width: ${Math.min(100, (makes / 200) * 100)}%"></div>
+                        </div>
+                        <div class="counter-controls">
+                            <button class="counter-btn" onclick="adjustMakes(-10)">-10</button>
+                            <button class="counter-btn" onclick="adjustMakes(-1)">-1</button>
+                            <button class="counter-btn" onclick="adjustMakes(1)">+1</button>
+                            <button class="counter-btn primary" onclick="adjustMakes(10)">+10</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderPlannedActivity(title, subtitle, plannedTime, actual, type, idx) {
+            const completed = actual && actual.completedAt;
+            let statusHtml = '';
+
+            if (completed) {
+                const timeDiff = getTimeDiffMinutes(plannedTime, actual.completedAt);
+                if (Math.abs(timeDiff) <= 30) {
+                    statusHtml = '<span class="status-badge completed">✓ Done</span>';
+                } else {
+                    statusHtml = '<span class="status-badge" style="background: rgba(245,158,11,0.2); color: var(--warning);">⚠ ' + formatTime(actual.completedAt) + '</span>';
+                }
+            } else {
+                statusHtml = '<span class="status-badge planned">' + formatTime(plannedTime) + '</span>';
+            }
+
+            return `
+                <div class="training-block">
+                    <div class="block-header">
+                        <div class="block-color ${type}"></div>
+                        <div class="block-info">
+                            <div class="block-title">${title}</div>
+                            <div class="block-time">${subtitle ? subtitle + ' • ' : ''}Planned: ${formatTime(plannedTime)}</div>
+                        </div>
+                        <div class="block-status">${statusHtml}</div>
+                        <div class="block-check ${completed ? 'checked' : ''}" onclick="openCompleteModal('${type}', ${idx})">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getTimeDiffMinutes(time1, time2) {
+            if (!time1 || !time2) return 999;
+            const [h1, m1] = time1.split(':').map(Number);
+            const [h2, m2] = time2.split(':').map(Number);
+            return (h2 * 60 + m2) - (h1 * 60 + m1);
+        }
+
+        // ============ CALENDAR VIEW ============
+        function renderCalendarView() {
+            const grid = document.getElementById('calendar-grid');
+            const monthLabel = document.getElementById('calendar-month');
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+
+            monthLabel.textContent = currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+            grid.innerHTML = '';
+
+            // Day headers
+            ['S', 'M', 'T', 'W', 'T', 'F', 'S'].forEach(day => {
+                const header = document.createElement('div');
+                header.className = 'calendar-day-header';
+                header.textContent = day;
+                grid.appendChild(header);
+            });
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+            // Previous month
+            for (let i = firstDay - 1; i >= 0; i--) {
+                grid.appendChild(createCalendarDay(new Date(year, month - 1, daysInPrevMonth - i), true));
+            }
+
+            // Current month
+            for (let i = 1; i <= daysInMonth; i++) {
+                grid.appendChild(createCalendarDay(new Date(year, month, i), false));
+            }
+
+            // Fill remaining
+            const remaining = 42 - grid.children.length + 7;
+            for (let i = 1; i <= remaining; i++) {
+                grid.appendChild(createCalendarDay(new Date(year, month + 1, i), true));
+            }
+
+            renderCalendarDayDetail();
+        }
+
+        function createCalendarDay(date, isOtherMonth) {
+            const cell = document.createElement('div');
+            cell.className = 'calendar-day';
+            if (isOtherMonth) cell.classList.add('other-month');
+
+            const today = new Date();
+            if (date.toDateString() === today.toDateString()) cell.classList.add('today');
+            if (date.toDateString() === selectedDate.toDateString()) cell.classList.add('selected');
+
+            const dayData = getDayData(date);
+            if (dayData.isGameDay) cell.classList.add('game-day');
+
+            // Calculate dots
+            const hasPlanned = dayData.planned.shooting ||
+                (dayData.planned.pickupRuns && dayData.planned.pickupRuns.length > 0) ||
+                (dayData.planned.custom && dayData.planned.custom.length > 0);
+            const completion = calculateDayCompletion(date);
+
+            let dotsHtml = '<div class="day-dots">';
+            if (completion === 100) {
+                dotsHtml += '<div class="day-dot completed"></div>';
+            } else if (hasPlanned) {
+                dotsHtml += '<div class="day-dot planned"></div>';
+            }
+            dotsHtml += '</div>';
+
+            cell.innerHTML = `<div class="day-num">${date.getDate()}</div>${dotsHtml}`;
+            cell.onclick = () => {
+                selectedDate = new Date(date);
+                renderCalendarView();
+            };
+
+            return cell;
+        }
+
+        function renderCalendarDayDetail() {
+            const container = document.getElementById('calendar-day-detail');
+            const dayData = getDayData(selectedDate);
+            const dow = selectedDate.getDay();
+
+            let html = `<div class="card"><div class="card-header">
+                <span class="card-title">${selectedDate.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}</span>
+                <span style="font-size: 0.75rem; color: var(--text-secondary);">${calculateDayCompletion(selectedDate)}% complete</span>
+            </div>`;
+
+            // Show activities for this day
+            const hasCoach = coachDays.includes(dow) && !dayData.isGameDay;
+            const hasVarsity = varsityDays.includes(dow) && !dayData.isGameDay;
+
+            if (hasCoach) {
+                html += `<div style="padding: 0.5rem 0; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; gap: 0.5rem;">
+                    <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--coach);"></div>
+                    <span style="font-size: 0.85rem;">Coach Session 5-7 AM</span>
+                    ${dayData.actual.coachSkills && dayData.actual.coachWeights ? '<span style="margin-left: auto; color: var(--success);">✓</span>' : ''}
+                </div>`;
+            }
+
+            if (hasVarsity) {
+                html += `<div style="padding: 0.5rem 0; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; gap: 0.5rem;">
+                    <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--varsity);"></div>
+                    <span style="font-size: 0.85rem;">Varsity 3:30-5:30 PM</span>
+                    ${dayData.actual.varsity ? '<span style="margin-left: auto; color: var(--success);">✓</span>' : ''}
+                </div>`;
+            }
+
+            // Shooting
+            html += `<div style="padding: 0.5rem 0; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; gap: 0.5rem;">
+                <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--shooting);"></div>
+                <span style="font-size: 0.85rem;">200 Makes</span>
+                <span style="margin-left: auto; font-size: 0.85rem; color: ${(dayData.actual.shootingMakes || 0) >= 200 ? 'var(--success)' : 'var(--text-muted)'};">
+                    ${dayData.actual.shootingMakes || 0}/200
+                </span>
+            </div>`;
+
+            // Planned activities
+            if (dayData.planned.pickupRuns) {
+                dayData.planned.pickupRuns.forEach((run, idx) => {
+                    const completed = dayData.actual.pickupRuns?.[idx]?.completedAt;
+                    html += `<div style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                        <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--pickup);"></div>
+                        <span style="font-size: 0.85rem;">Pickup @ ${run.location}</span>
+                        <span style="margin-left: auto; font-size: 0.75rem; color: var(--text-secondary);">${formatTime(run.time)}</span>
+                        ${completed ? '<span style="color: var(--success);">✓</span>' : ''}
+                    </div>`;
+                });
+            }
+
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        function changeMonth(delta) {
+            currentDate.setMonth(currentDate.getMonth() + delta);
+            renderCalendarView();
+        }
+
+        function goToToday() {
+            currentDate = new Date();
+            selectedDate = new Date();
+            renderCalendarView();
+        }
+
+        // ============ PLAN WEEK VIEW ============
+        function renderPlanView() {
+            const container = document.getElementById('week-planner');
+            const today = new Date();
+            const startOfWeek = new Date(today);
+            startOfWeek.setDate(today.getDate() - today.getDay());
+
+            let html = '';
+
+            for (let i = 0; i < 7; i++) {
+                const date = new Date(startOfWeek);
+                date.setDate(startOfWeek.getDate() + i);
+                const dayData = getDayData(date);
+                const dow = date.getDay();
+                const isToday = date.toDateString() === today.toDateString();
+
+                const hasCoach = coachDays.includes(dow);
+                const hasVarsity = varsityDays.includes(dow);
+
+                html += `
+                    <div class="week-day-card" style="${isToday ? 'border-color: var(--accent);' : ''}">
+                        <div class="week-day-header" onclick="toggleWeekDay(this)">
+                            <div>
+                                <span class="week-day-name">${date.toLocaleDateString('en-US', { weekday: 'short' })}</span>
+                                <span class="week-day-date">${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+                                ${isToday ? '<span style="color: var(--accent); font-size: 0.7rem; margin-left: 0.5rem;">TODAY</span>' : ''}
+                            </div>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"/>
+                            </svg>
+                        </div>
+                        <div class="week-day-content ${i > 1 ? 'collapsed' : ''}">
+                `;
+
+                // Fixed events
+                if (hasCoach && !dayData.isGameDay) {
+                    html += `<div class="fixed-event">
+                        <div class="dot" style="background: var(--coach);"></div>
+                        <span>Coach Session 5-7 AM</span>
+                    </div>`;
+                }
+                if (hasVarsity && !dayData.isGameDay) {
+                    html += `<div class="fixed-event">
+                        <div class="dot" style="background: var(--varsity);"></div>
+                        <span>Varsity 3:30-5:30 PM</span>
+                    </div>`;
+                }
+
+                // Planned activities
+                html += '<div class="planned-events">';
+
+                // Shooting
+                if (dayData.planned.shooting) {
+                    html += `<div class="planned-event" style="border-left-color: var(--shooting);">
+                        <div class="planned-event-info">
+                            <span class="planned-event-time">${formatTime(dayData.planned.shooting.time)}</span>
+                            <span class="planned-event-name">200 Makes</span>
+                        </div>
+                        <button class="planned-event-remove" onclick="removePlannedActivity('${getDateKey(date)}', 'shooting', 0)">✕</button>
+                    </div>`;
+                }
+
+                // Pickup runs
+                if (dayData.planned.pickupRuns) {
+                    dayData.planned.pickupRuns.forEach((run, idx) => {
+                        html += `<div class="planned-event" style="border-left-color: var(--pickup);">
+                            <div class="planned-event-info">
+                                <span class="planned-event-time">${formatTime(run.time)}</span>
+                                <span class="planned-event-name">Pickup @ ${run.location}</span>
+                            </div>
+                            <button class="planned-event-remove" onclick="removePlannedActivity('${getDateKey(date)}', 'pickup', ${idx})">✕</button>
+                        </div>`;
+                    });
+                }
+
+                // Custom
+                if (dayData.planned.custom) {
+                    dayData.planned.custom.forEach((activity, idx) => {
+                        html += `<div class="planned-event" style="border-left-color: var(--custom);">
+                            <div class="planned-event-info">
+                                <span class="planned-event-time">${formatTime(activity.time)}</span>
+                                <span class="planned-event-name">${activity.name}</span>
+                            </div>
+                            <button class="planned-event-remove" onclick="removePlannedActivity('${getDateKey(date)}', 'custom', ${idx})">✕</button>
+                        </div>`;
+                    });
+                }
+
+                html += `
+                    <button class="add-activity-btn" onclick="openAddActivityModal('${getDateKey(date)}')">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                        Add Activity
+                    </button>
+                </div></div></div>`;
+            }
+
+            container.innerHTML = html;
+        }
+
+        function toggleWeekDay(header) {
+            const content = header.nextElementSibling;
+            content.classList.toggle('collapsed');
+        }
+
+        // ============ STATS VIEW ============
+        function renderStatsView() {
+            // Basic stats
+            document.getElementById('stats-streak').textContent = calculateStreak();
+            document.getElementById('stats-total-makes').textContent = calculateTotalMakes().toLocaleString();
+            document.getElementById('stats-sessions').textContent = calculateTotalSessions();
+
+            // Weekly completion
+            const weekCompletion = calculateWeekCompletion();
+            document.getElementById('week-completion-pct').innerHTML = `${weekCompletion}<small>%</small>`;
+            const ring = document.getElementById('completion-ring');
+            const offset = 327 - (327 * weekCompletion / 100);
+            ring.style.strokeDashoffset = offset;
+
+            // Weekly bars
+            const barsContainer = document.getElementById('weekly-bars');
+            const today = new Date();
+            const dayLabels = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+            let barsHtml = '';
+
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date(today);
+                date.setDate(today.getDate() - i);
+                const dayData = getDayData(date);
+                const makes = dayData.actual.shootingMakes || 0;
+                const height = Math.min(80, (makes / 200) * 80);
+
+                barsHtml += `<div class="weekly-bar">
+                    <div class="bar-fill" style="height: ${height}px;"></div>
+                    <span class="bar-label">${dayLabels[date.getDay()]}</span>
+                </div>`;
+            }
+            barsContainer.innerHTML = barsHtml;
+
+            // Consistency score
+            document.getElementById('consistency-score').innerHTML = `${calculateConsistencyScore()}<small>%</small>`;
+        }
+
+        // ============ CALCULATIONS ============
+        function calculateStreak() {
+            let streak = 0;
+            const today = new Date();
+            for (let i = 0; i < 365; i++) {
+                const date = new Date(today);
+                date.setDate(today.getDate() - i);
+                const dayData = getDayData(date);
+                if ((dayData.actual.shootingMakes || 0) >= 200) {
+                    streak++;
+                } else if (i > 0) {
+                    break;
+                }
+            }
+            return streak;
+        }
+
+        function calculateTotalMakes() {
+            let total = 0;
+            for (const key in trainingData) {
+                total += trainingData[key].actual?.shootingMakes || 0;
+            }
+            return total;
+        }
+
+        function calculateTotalSessions() {
+            let total = 0;
+            for (const key in trainingData) {
+                const day = trainingData[key];
+                if (day.actual) {
+                    if (day.actual.coachSkills) total++;
+                    if (day.actual.coachWeights) total++;
+                    if (day.actual.varsity) total++;
+                    total += (day.actual.pickupRuns?.filter(r => r.completedAt)?.length || 0);
+                }
+            }
+            return total;
+        }
+
+        function calculateDayCompletion(date) {
+            const dayData = getDayData(date);
+            const dow = new Date(date).getDay();
+            let planned = 1; // Shooting is always planned
+            let completed = 0;
+
+            // Shooting
+            if ((dayData.actual.shootingMakes || 0) >= 200) completed++;
+
+            // Coach
+            if (coachDays.includes(dow) && !dayData.isGameDay) {
+                planned += 2;
+                if (dayData.actual.coachSkills) completed++;
+                if (dayData.actual.coachWeights) completed++;
+            }
+
+            // Varsity
+            if (varsityDays.includes(dow) && !dayData.isGameDay) {
+                planned++;
+                if (dayData.actual.varsity) completed++;
+            }
+
+            // Planned pickups
+            if (dayData.planned.pickupRuns) {
+                planned += dayData.planned.pickupRuns.length;
+                completed += (dayData.actual.pickupRuns?.filter(r => r.completedAt)?.length || 0);
+            }
+
+            // Planned custom
+            if (dayData.planned.custom) {
+                planned += dayData.planned.custom.length;
+                completed += (dayData.actual.custom?.filter(c => c.completedAt)?.length || 0);
+            }
+
+            return planned > 0 ? Math.round((completed / planned) * 100) : 0;
+        }
+
+        function calculateWeekCompletion() {
+            const today = new Date();
+            const startOfWeek = new Date(today);
+            startOfWeek.setDate(today.getDate() - today.getDay());
+
+            let totalCompletion = 0;
+            let daysWithData = 0;
+
+            for (let i = 0; i < 7; i++) {
+                const date = new Date(startOfWeek);
+                date.setDate(startOfWeek.getDate() + i);
+                if (date <= today) {
+                    totalCompletion += calculateDayCompletion(date);
+                    daysWithData++;
+                }
+            }
+
+            return daysWithData > 0 ? Math.round(totalCompletion / daysWithData) : 0;
+        }
+
+        function calculateConsistencyScore() {
+            let onTime = 0;
+            let total = 0;
+
+            for (const key in trainingData) {
+                const day = trainingData[key];
+                if (day.planned && day.actual) {
+                    // Check shooting
+                    if (day.planned.shooting && day.actual.shootingCompletedAt) {
+                        total++;
+                        if (Math.abs(getTimeDiffMinutes(day.planned.shooting.time, day.actual.shootingCompletedAt)) <= 30) {
+                            onTime++;
+                        }
+                    }
+
+                    // Check pickups
+                    if (day.planned.pickupRuns && day.actual.pickupRuns) {
+                        day.planned.pickupRuns.forEach((planned, idx) => {
+                            if (day.actual.pickupRuns[idx]?.completedAt) {
+                                total++;
+                                if (Math.abs(getTimeDiffMinutes(planned.time, day.actual.pickupRuns[idx].completedAt)) <= 30) {
+                                    onTime++;
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+
+            return total > 0 ? Math.round((onTime / total) * 100) : 0;
+        }
+
+        // ============ ACTIONS ============
+        function toggleGameDay() {
+            const today = new Date();
+            const dayData = getDayData(today);
+            dayData.isGameDay = !dayData.isGameDay;
+            saveData();
+            renderTodayView();
+        }
+
+        function toggleFixed(type) {
+            const today = new Date();
+            const dayData = getDayData(today);
+            dayData.actual[type] = !dayData.actual[type];
+            saveData();
+            renderTodayView();
+        }
+
+        function adjustMakes(amount) {
+            const today = new Date();
+            const dayData = getDayData(today);
+            const newValue = Math.max(0, (dayData.actual.shootingMakes || 0) + amount);
+            dayData.actual.shootingMakes = newValue;
+
+            // Auto-set completion time when reaching 200
+            if (newValue >= 200 && !dayData.actual.shootingCompletedAt) {
+                const now = new Date();
+                dayData.actual.shootingCompletedAt = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+            }
+
+            saveData();
+            renderTodayView();
+        }
+
+        // ============ MODALS ============
+        function openAddActivityModal(dateKey) {
+            currentPlanningDate = dateKey;
+            selectedActivityType = 'shooting';
+            document.querySelectorAll('.activity-type-btn').forEach(btn => {
+                btn.classList.toggle('selected', btn.dataset.type === 'shooting');
+            });
+            document.getElementById('location-group').style.display = 'none';
+            document.getElementById('custom-name-group').style.display = 'none';
+            document.getElementById('add-activity-modal').classList.add('active');
+        }
+
+        function closeAddActivityModal() {
+            document.getElementById('add-activity-modal').classList.remove('active');
+        }
+
+        function selectActivityType(type) {
+            selectedActivityType = type;
+            document.querySelectorAll('.activity-type-btn').forEach(btn => {
+                btn.classList.toggle('selected', btn.dataset.type === type);
+            });
+            document.getElementById('location-group').style.display = type === 'pickup' ? 'block' : 'none';
+            document.getElementById('custom-name-group').style.display = type === 'custom' ? 'block' : 'none';
+        }
+
+        function saveActivity() {
+            const time = document.getElementById('activity-time').value;
+            const dayData = getDayData(new Date(currentPlanningDate + 'T12:00:00'));
+
+            if (selectedActivityType === 'shooting') {
+                dayData.planned.shooting = { time };
+            } else if (selectedActivityType === 'pickup') {
+                const location = document.getElementById('activity-location').value;
+                if (!dayData.planned.pickupRuns) dayData.planned.pickupRuns = [];
+                dayData.planned.pickupRuns.push({ time, location });
+            } else if (selectedActivityType === 'custom') {
+                const name = document.getElementById('activity-name').value || 'Custom Activity';
+                if (!dayData.planned.custom) dayData.planned.custom = [];
+                dayData.planned.custom.push({ time, name });
+            }
+
+            saveData();
+            closeAddActivityModal();
+            scheduleNotifications();
+            renderCurrentView();
+        }
+
+        function removePlannedActivity(dateKey, type, idx) {
+            const dayData = getDayData(new Date(dateKey + 'T12:00:00'));
+
+            if (type === 'shooting') {
+                dayData.planned.shooting = null;
+            } else if (type === 'pickup') {
+                dayData.planned.pickupRuns.splice(idx, 1);
+            } else if (type === 'custom') {
+                dayData.planned.custom.splice(idx, 1);
+            }
+
+            saveData();
+            renderCurrentView();
+        }
+
+        function openCompleteModal(type, idx) {
+            currentCompletingActivity = { type, idx };
+            const now = new Date();
+            document.getElementById('completion-time').value =
+                `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+            document.getElementById('complete-activity-modal').classList.add('active');
+        }
+
+        function closeCompleteModal() {
+            document.getElementById('complete-activity-modal').classList.remove('active');
+        }
+
+        function confirmCompletion() {
+            const time = document.getElementById('completion-time').value;
+            const today = new Date();
+            const dayData = getDayData(today);
+            const { type, idx } = currentCompletingActivity;
+
+            if (type === 'pickup') {
+                if (!dayData.actual.pickupRuns) dayData.actual.pickupRuns = [];
+                dayData.actual.pickupRuns[idx] = { completedAt: time };
+            } else if (type === 'custom') {
+                if (!dayData.actual.custom) dayData.actual.custom = [];
+                dayData.actual.custom[idx] = { completedAt: time };
+            }
+
+            saveData();
+            closeCompleteModal();
+            renderTodayView();
+        }
+
+        // ============ NOTIFICATIONS ============
+        function checkNotificationPermission() {
+            if ('Notification' in window && Notification.permission === 'default') {
+                document.getElementById('notification-banner').classList.remove('hidden');
+            }
+        }
+
+        function requestNotifications() {
+            if ('Notification' in window) {
+                Notification.requestPermission().then(permission => {
+                    document.getElementById('notification-banner').classList.add('hidden');
+                    if (permission === 'granted') {
+                        scheduleNotifications();
+                    }
+                });
+            }
+        }
+
+        function scheduleNotifications() {
+            // This would integrate with service worker for real notifications
+            // For now, just a placeholder
+            console.log('Notifications scheduled');
+        }
+
+        // ============ SERVICE WORKER ============
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then((registration) => {
+                        console.log('SW registered:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.log('SW registration failed:', error);
+                    });
+            });
+        }
+
+        // ============ START ============
+        init();
+    </script>
+</body>
+</html>
