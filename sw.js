@@ -2,7 +2,7 @@
 const CACHE_NAME = 'ethan-training-v1';
 const ASSETS_TO_CACHE = [
   './',
-  "./Ethan's Basketball Training.html",
+  "./index.html",
   'https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&display=swap'
 ];
 
@@ -68,7 +68,7 @@ self.addEventListener('notificationclick', (event) => {
       }
       // Otherwise open a new window
       if (clients.openWindow) {
-        return clients.openWindow("./Ethan's Basketball Training.html");
+        return clients.openWindow("./index.html");
       }
     })
   );

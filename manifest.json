@@ -2,7 +2,7 @@
   "name": "Ethan's Basketball Training",
   "short_name": "Ethan Training",
   "description": "Track basketball training, plan weekly activities, and monitor progress",
-  "start_url": "./Ethan's Basketball Training.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#0a0a0a",
   "theme_color": "#ff6b2c",
