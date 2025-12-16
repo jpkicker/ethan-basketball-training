@@ -1,0 +1,13 @@
+{
+  "name": "ethan-basketball-training",
+  "version": "1.0.0",
+  "description": "Basketball training tracker PWA",
+  "scripts": {
+    "start": "cd server && npm start",
+    "build": "cd server && npm install",
+    "postinstall": "cd server && npm install && npx prisma generate"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
