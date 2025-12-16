@@ -1742,8 +1742,9 @@
 
     <script>
         // ============ CONFIG ============
-        // Update this URL after deploying to Railway
-        const API_URL = localStorage.getItem('apiUrl') || 'http://localhost:3000/api';
+        const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:3000/api'
+            : 'https://ethan-basketball-training-production.up.railway.app/api';
 
         // ============ STATE ============
         let currentView = 'today';
