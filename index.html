@@ -50,6 +50,212 @@
             padding-bottom: calc(70px + var(--safe-bottom));
         }
 
+        /* Auth Screen */
+        .auth-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .auth-screen.hidden {
+            display: none;
+        }
+
+        .auth-logo {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .auth-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .auth-title span {
+            color: var(--accent);
+        }
+
+        .auth-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .auth-form {
+            width: 100%;
+            max-width: 320px;
+        }
+
+        .auth-form .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .auth-form .form-input {
+            width: 100%;
+            padding: 0.875rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: 'Barlow', sans-serif;
+            font-size: 1rem;
+        }
+
+        .auth-form .form-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .auth-form .btn-primary {
+            width: 100%;
+            padding: 0.875rem;
+            background: var(--accent);
+            color: var(--bg-dark);
+            border: none;
+            border-radius: 8px;
+            font-family: 'Barlow', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 0.5rem;
+        }
+
+        .auth-form .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .auth-toggle {
+            margin-top: 1.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .auth-toggle a {
+            color: var(--accent);
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .auth-error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--game);
+            color: var(--game);
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            display: none;
+        }
+
+        .auth-error.visible {
+            display: block;
+        }
+
+        /* Main App Container */
+        .app-container {
+            display: none;
+        }
+
+        .app-container.visible {
+            display: block;
+        }
+
+        /* User Menu */
+        .user-menu-btn {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-subtle);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .user-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 0.5rem;
+            min-width: 150px;
+            display: none;
+            z-index: 150;
+        }
+
+        .user-dropdown.visible {
+            display: block;
+        }
+
+        .user-dropdown-item {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .user-dropdown-item:hover {
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+        }
+
+        .user-dropdown-item.danger {
+            color: var(--game);
+        }
+
+        /* Sync Status */
+        .sync-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--accent);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s;
+            z-index: 200;
+        }
+
+        .sync-indicator.syncing {
+            animation: syncPulse 1s infinite;
+        }
+
+        @keyframes syncPulse {
+            0%, 100% { transform: scaleX(0.3); }
+            50% { transform: scaleX(0.7); }
+        }
+
+        .offline-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--warning);
+            color: var(--bg-dark);
+            padding: 0.5rem;
+            text-align: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+            z-index: 199;
+            display: none;
+        }
+
+        .offline-banner.visible {
+            display: block;
+        }
+
         /* Views */
         .view {
             display: none;
@@ -76,6 +282,7 @@
             align-items: center;
             margin-bottom: 1.5rem;
             padding-top: 0.5rem;
+            position: relative;
         }
 
         .view-title {
@@ -412,35 +619,6 @@
 
         .block-check.checked svg {
             opacity: 1;
-        }
-
-        /* Planned vs Actual comparison */
-        .comparison-row {
-            display: grid;
-            grid-template-columns: 1fr auto 1fr;
-            gap: 0.5rem;
-            align-items: center;
-            padding: 0.75rem;
-            border-top: 1px solid var(--border-subtle);
-        }
-
-        .comparison-label {
-            font-size: 0.65rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            text-align: center;
-        }
-
-        .comparison-value {
-            font-size: 0.85rem;
-            text-align: center;
-        }
-
-        .comparison-value.planned { color: var(--text-secondary); }
-        .comparison-value.actual { color: var(--text-primary); }
-
-        .comparison-icon {
-            font-size: 1rem;
         }
 
         /* Shooting counter */
@@ -1115,332 +1293,387 @@
     </style>
 </head>
 <body>
-    <!-- TODAY VIEW -->
-    <div id="view-today" class="view active">
-        <div class="view-header">
-            <h1 class="view-title">TODAY<span>'</span>S TRAINING</h1>
-        </div>
+    <!-- Sync Indicator -->
+    <div class="sync-indicator" id="sync-indicator"></div>
+    <div class="offline-banner" id="offline-banner">You're offline - changes will sync when connected</div>
 
-        <div id="notification-banner" class="notification-banner hidden">
-            <span class="notification-banner-icon">🔔</span>
-            <div class="notification-banner-text">
-                <h4>Enable Reminders</h4>
-                <p>Get notified before your training</p>
-            </div>
-            <button onclick="requestNotifications()">Enable</button>
-        </div>
+    <!-- AUTH SCREEN -->
+    <div id="auth-screen" class="auth-screen">
+        <div class="auth-logo">🏀</div>
+        <h1 class="auth-title">ETHAN<span>'</span>S TRAINING</h1>
+        <p class="auth-subtitle">Track your basketball journey</p>
 
-        <div class="stats-row">
-            <div class="stat-chip">
-                <div class="value" id="today-streak">0</div>
-                <div class="label">Day Streak</div>
-            </div>
-            <div class="stat-chip">
-                <div class="value" id="today-makes">0</div>
-                <div class="label">Makes Today</div>
-            </div>
-            <div class="stat-chip">
-                <div class="value" id="today-completion">0%</div>
-                <div class="label">Completed</div>
-            </div>
-        </div>
+        <div class="auth-form">
+            <div id="auth-error" class="auth-error"></div>
 
-        <div id="today-schedule"></div>
-    </div>
-
-    <!-- CALENDAR VIEW -->
-    <div id="view-calendar" class="view">
-        <div class="view-header">
-            <h1 class="view-title">CALENDAR</h1>
-        </div>
-
-        <div class="calendar-mini">
-            <div class="calendar-header">
-                <div class="calendar-nav">
-                    <button onclick="changeMonth(-1)">‹</button>
-                    <span class="calendar-month" id="calendar-month">December 2024</span>
-                    <button onclick="changeMonth(1)">›</button>
+            <div id="login-form">
+                <div class="form-group">
+                    <input type="email" id="login-email" class="form-input" placeholder="Email" autocomplete="email">
                 </div>
-                <button class="today-btn" onclick="goToToday()">Today</button>
-            </div>
-            <div class="calendar-grid" id="calendar-grid"></div>
-            <div class="legend">
-                <div class="legend-item"><div class="legend-dot" style="background: var(--success)"></div> Completed</div>
-                <div class="legend-item"><div class="legend-dot" style="background: var(--accent); opacity: 0.5"></div> Planned</div>
-                <div class="legend-item"><div class="legend-dot" style="background: var(--game)"></div> Game Day</div>
-            </div>
-        </div>
-
-        <div id="calendar-day-detail"></div>
-    </div>
-
-    <!-- PLAN WEEK VIEW -->
-    <div id="view-plan" class="view">
-        <div class="view-header">
-            <h1 class="view-title">PLAN <span>WEEK</span></h1>
-        </div>
-
-        <div id="week-planner"></div>
-    </div>
-
-    <!-- GUIDE VIEW -->
-    <div id="view-guide" class="view">
-        <div class="view-header">
-            <h1 class="view-title">DAILY <span>GUIDE</span></h1>
-        </div>
-
-        <div class="guide-intro card">
-            <div class="guide-icon">📋</div>
-            <p>Follow this routine to get the most out of your training tracker.</p>
-        </div>
-
-        <div class="guide-section">
-            <div class="guide-section-header">
-                <span class="guide-number">1</span>
-                <h3>Sunday Night: Plan Your Week</h3>
-            </div>
-            <div class="guide-content">
-                <ul class="guide-list">
-                    <li><span class="guide-check">☐</span> Go to the <strong>Plan</strong> tab</li>
-                    <li><span class="guide-check">☐</span> For each day, add your planned activities:
-                        <ul>
-                            <li>When you'll do your <strong>200 makes</strong></li>
-                            <li>Any <strong>pickup runs</strong> (location + time)</li>
-                            <li>Any <strong>custom training</strong></li>
-                        </ul>
-                    </li>
-                    <li><span class="guide-check">☐</span> Mark any <strong>game days</strong> (no varsity practice)</li>
-                </ul>
-                <div class="guide-tip">
-                    <span>💡</span> Planning ahead helps you stay accountable and builds consistency.
+                <div class="form-group">
+                    <input type="password" id="login-password" class="form-input" placeholder="Password" autocomplete="current-password">
                 </div>
+                <button class="btn-primary" onclick="handleLogin()" id="login-btn">Sign In</button>
             </div>
-        </div>
 
-        <div class="guide-section">
-            <div class="guide-section-header">
-                <span class="guide-number">2</span>
-                <h3>Every Morning: Check Today's Plan</h3>
-            </div>
-            <div class="guide-content">
-                <ul class="guide-list">
-                    <li><span class="guide-check">☐</span> Open the app and check the <strong>Today</strong> tab</li>
-                    <li><span class="guide-check">☐</span> Review what's scheduled for the day</li>
-                    <li><span class="guide-check">☐</span> Make sure notifications are enabled for reminders</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="guide-section">
-            <div class="guide-section-header">
-                <span class="guide-number">3</span>
-                <h3>After Each Activity: Log Completion</h3>
-            </div>
-            <div class="guide-content">
-                <ul class="guide-list">
-                    <li><span class="guide-check">☐</span> <strong>Coach Sessions:</strong> Tap the checkbox when done</li>
-                    <li><span class="guide-check">☐</span> <strong>Varsity Practice:</strong> Tap the checkbox when done</li>
-                    <li><span class="guide-check">☐</span> <strong>200 Makes:</strong> Use the +1/+10 buttons as you shoot
-                        <ul>
-                            <li>The app auto-records your completion time when you hit 200</li>
-                        </ul>
-                    </li>
-                    <li><span class="guide-check">☐</span> <strong>Pickup Runs / Custom:</strong> Tap the checkbox and enter completion time</li>
-                </ul>
-                <div class="guide-tip">
-                    <span>⏱️</span> Log immediately after finishing for accurate time tracking!
+            <div id="register-form" style="display: none;">
+                <div class="form-group">
+                    <input type="text" id="register-name" class="form-input" placeholder="Your Name" autocomplete="name">
                 </div>
-            </div>
-        </div>
-
-        <div class="guide-section">
-            <div class="guide-section-header">
-                <span class="guide-number">4</span>
-                <h3>End of Day: Quick Review</h3>
-            </div>
-            <div class="guide-content">
-                <ul class="guide-list">
-                    <li><span class="guide-check">☐</span> Check your completion percentage in <strong>Today</strong> tab</li>
-                    <li><span class="guide-check">☐</span> Make sure all activities are logged</li>
-                    <li><span class="guide-check">☐</span> Note any missed activities to reschedule</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="guide-section">
-            <div class="guide-section-header">
-                <span class="guide-number">5</span>
-                <h3>Weekly: Check Your Progress</h3>
-            </div>
-            <div class="guide-content">
-                <ul class="guide-list">
-                    <li><span class="guide-check">☐</span> Visit the <strong>Stats</strong> tab</li>
-                    <li><span class="guide-check">☐</span> Review your:
-                        <ul>
-                            <li><strong>Streak</strong> – consecutive days with 200 makes</li>
-                            <li><strong>Weekly completion %</strong> – planned vs done</li>
-                            <li><strong>Consistency score</strong> – on-time completion</li>
-                        </ul>
-                    </li>
-                    <li><span class="guide-check">☐</span> Adjust next week's plan based on results</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="guide-section highlight">
-            <div class="guide-section-header">
-                <span class="guide-number">⭐</span>
-                <h3>Keys to Success</h3>
-            </div>
-            <div class="guide-content">
-                <div class="success-keys">
-                    <div class="success-key">
-                        <div class="key-icon">🎯</div>
-                        <div class="key-text">
-                            <strong>Be Specific</strong>
-                            <span>Plan exact times, not "sometime today"</span>
-                        </div>
-                    </div>
-                    <div class="success-key">
-                        <div class="key-icon">📱</div>
-                        <div class="key-text">
-                            <strong>Log Immediately</strong>
-                            <span>Track right after completing each activity</span>
-                        </div>
-                    </div>
-                    <div class="success-key">
-                        <div class="key-icon">🔥</div>
-                        <div class="key-text">
-                            <strong>Protect Your Streak</strong>
-                            <span>200 makes every day, no exceptions</span>
-                        </div>
-                    </div>
-                    <div class="success-key">
-                        <div class="key-icon">📊</div>
-                        <div class="key-text">
-                            <strong>Review Weekly</strong>
-                            <span>Learn from your data and adjust</span>
-                        </div>
-                    </div>
+                <div class="form-group">
+                    <input type="email" id="register-email" class="form-input" placeholder="Email" autocomplete="email">
                 </div>
+                <div class="form-group">
+                    <input type="password" id="register-password" class="form-input" placeholder="Password (6+ characters)" autocomplete="new-password">
+                </div>
+                <button class="btn-primary" onclick="handleRegister()" id="register-btn">Create Account</button>
             </div>
-        </div>
 
-        <div class="guide-fixed-schedule">
-            <h4>Your Fixed Schedule (Auto-Tracked)</h4>
-            <div class="fixed-item">
-                <span class="fixed-dot" style="background: var(--coach);"></span>
-                <span>Coach Sessions: Mon/Wed/Fri 5-7 AM</span>
-            </div>
-            <div class="fixed-item">
-                <span class="fixed-dot" style="background: var(--varsity);"></span>
-                <span>Varsity Practice: Mon-Fri 3:30-5:30 PM</span>
-            </div>
-            <div class="fixed-item">
-                <span class="fixed-dot" style="background: var(--shooting);"></span>
-                <span>200 Makes: Every day (you pick the time)</span>
-            </div>
+            <p class="auth-toggle" id="auth-toggle-login">
+                Don't have an account? <a onclick="showRegisterForm()">Sign up</a>
+            </p>
+            <p class="auth-toggle" id="auth-toggle-register" style="display: none;">
+                Already have an account? <a onclick="showLoginForm()">Sign in</a>
+            </p>
         </div>
     </div>
 
-    <!-- STATS VIEW -->
-    <div id="view-stats" class="view">
-        <div class="view-header">
-            <h1 class="view-title">YOUR <span>STATS</span></h1>
+    <!-- MAIN APP -->
+    <div id="app-container" class="app-container">
+        <!-- TODAY VIEW -->
+        <div id="view-today" class="view active">
+            <div class="view-header">
+                <h1 class="view-title">TODAY<span>'</span>S TRAINING</h1>
+                <div style="position: relative;">
+                    <button class="user-menu-btn" id="user-menu-btn" onclick="toggleUserMenu()">E</button>
+                    <div class="user-dropdown" id="user-dropdown">
+                        <div class="user-dropdown-item" id="user-name-display">Loading...</div>
+                        <div class="user-dropdown-item danger" onclick="handleLogout()">Sign Out</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="notification-banner" class="notification-banner hidden">
+                <span class="notification-banner-icon">🔔</span>
+                <div class="notification-banner-text">
+                    <h4>Enable Reminders</h4>
+                    <p>Get notified before your training</p>
+                </div>
+                <button onclick="requestNotifications()">Enable</button>
+            </div>
+
+            <div class="stats-row">
+                <div class="stat-chip">
+                    <div class="value" id="today-streak">0</div>
+                    <div class="label">Day Streak</div>
+                </div>
+                <div class="stat-chip">
+                    <div class="value" id="today-makes">0</div>
+                    <div class="label">Makes Today</div>
+                </div>
+                <div class="stat-chip">
+                    <div class="value" id="today-completion">0%</div>
+                    <div class="label">Completed</div>
+                </div>
+            </div>
+
+            <div id="today-schedule"></div>
         </div>
 
-        <div class="stats-row">
-            <div class="stat-chip">
-                <div class="value" id="stats-streak">0</div>
-                <div class="label">Day Streak</div>
+        <!-- CALENDAR VIEW -->
+        <div id="view-calendar" class="view">
+            <div class="view-header">
+                <h1 class="view-title">CALENDAR</h1>
             </div>
-            <div class="stat-chip">
-                <div class="value" id="stats-total-makes">0</div>
-                <div class="label">Total Makes</div>
+
+            <div class="calendar-mini">
+                <div class="calendar-header">
+                    <div class="calendar-nav">
+                        <button onclick="changeMonth(-1)">‹</button>
+                        <span class="calendar-month" id="calendar-month">December 2024</span>
+                        <button onclick="changeMonth(1)">›</button>
+                    </div>
+                    <button class="today-btn" onclick="goToToday()">Today</button>
+                </div>
+                <div class="calendar-grid" id="calendar-grid"></div>
+                <div class="legend">
+                    <div class="legend-item"><div class="legend-dot" style="background: var(--success)"></div> Completed</div>
+                    <div class="legend-item"><div class="legend-dot" style="background: var(--accent); opacity: 0.5"></div> Planned</div>
+                    <div class="legend-item"><div class="legend-dot" style="background: var(--game)"></div> Game Day</div>
+                </div>
             </div>
-            <div class="stat-chip">
-                <div class="value" id="stats-sessions">0</div>
-                <div class="label">Sessions</div>
+
+            <div id="calendar-day-detail"></div>
+        </div>
+
+        <!-- PLAN WEEK VIEW -->
+        <div id="view-plan" class="view">
+            <div class="view-header">
+                <h1 class="view-title">PLAN <span>WEEK</span></h1>
+            </div>
+
+            <div id="week-planner"></div>
+        </div>
+
+        <!-- GUIDE VIEW -->
+        <div id="view-guide" class="view">
+            <div class="view-header">
+                <h1 class="view-title">DAILY <span>GUIDE</span></h1>
+            </div>
+
+            <div class="guide-intro card">
+                <div class="guide-icon">📋</div>
+                <p>Follow this routine to get the most out of your training tracker.</p>
+            </div>
+
+            <div class="guide-section">
+                <div class="guide-section-header">
+                    <span class="guide-number">1</span>
+                    <h3>Sunday Night: Plan Your Week</h3>
+                </div>
+                <div class="guide-content">
+                    <ul class="guide-list">
+                        <li><span class="guide-check">☐</span> Go to the <strong>Plan</strong> tab</li>
+                        <li><span class="guide-check">☐</span> For each day, add your planned activities:
+                            <ul>
+                                <li>When you'll do your <strong>200 makes</strong></li>
+                                <li>Any <strong>pickup runs</strong> (location + time)</li>
+                                <li>Any <strong>custom training</strong></li>
+                            </ul>
+                        </li>
+                        <li><span class="guide-check">☐</span> Mark any <strong>game days</strong> (no varsity practice)</li>
+                    </ul>
+                    <div class="guide-tip">
+                        <span>💡</span> Planning ahead helps you stay accountable and builds consistency.
+                    </div>
+                </div>
+            </div>
+
+            <div class="guide-section">
+                <div class="guide-section-header">
+                    <span class="guide-number">2</span>
+                    <h3>Every Morning: Check Today's Plan</h3>
+                </div>
+                <div class="guide-content">
+                    <ul class="guide-list">
+                        <li><span class="guide-check">☐</span> Open the app and check the <strong>Today</strong> tab</li>
+                        <li><span class="guide-check">☐</span> Review what's scheduled for the day</li>
+                        <li><span class="guide-check">☐</span> Make sure notifications are enabled for reminders</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="guide-section">
+                <div class="guide-section-header">
+                    <span class="guide-number">3</span>
+                    <h3>After Each Activity: Log Completion</h3>
+                </div>
+                <div class="guide-content">
+                    <ul class="guide-list">
+                        <li><span class="guide-check">☐</span> <strong>Coach Sessions:</strong> Tap the checkbox when done</li>
+                        <li><span class="guide-check">☐</span> <strong>Varsity Practice:</strong> Tap the checkbox when done</li>
+                        <li><span class="guide-check">☐</span> <strong>200 Makes:</strong> Use the +1/+10 buttons as you shoot
+                            <ul>
+                                <li>The app auto-records your completion time when you hit 200</li>
+                            </ul>
+                        </li>
+                        <li><span class="guide-check">☐</span> <strong>Pickup Runs / Custom:</strong> Tap the checkbox and enter completion time</li>
+                    </ul>
+                    <div class="guide-tip">
+                        <span>⏱️</span> Log immediately after finishing for accurate time tracking!
+                    </div>
+                </div>
+            </div>
+
+            <div class="guide-section">
+                <div class="guide-section-header">
+                    <span class="guide-number">4</span>
+                    <h3>End of Day: Quick Review</h3>
+                </div>
+                <div class="guide-content">
+                    <ul class="guide-list">
+                        <li><span class="guide-check">☐</span> Check your completion percentage in <strong>Today</strong> tab</li>
+                        <li><span class="guide-check">☐</span> Make sure all activities are logged</li>
+                        <li><span class="guide-check">☐</span> Note any missed activities to reschedule</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="guide-section">
+                <div class="guide-section-header">
+                    <span class="guide-number">5</span>
+                    <h3>Weekly: Check Your Progress</h3>
+                </div>
+                <div class="guide-content">
+                    <ul class="guide-list">
+                        <li><span class="guide-check">☐</span> Visit the <strong>Stats</strong> tab</li>
+                        <li><span class="guide-check">☐</span> Review your:
+                            <ul>
+                                <li><strong>Streak</strong> – consecutive days with 200 makes</li>
+                                <li><strong>Weekly completion %</strong> – planned vs done</li>
+                                <li><strong>Consistency score</strong> – on-time completion</li>
+                            </ul>
+                        </li>
+                        <li><span class="guide-check">☐</span> Adjust next week's plan based on results</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="guide-section highlight">
+                <div class="guide-section-header">
+                    <span class="guide-number">⭐</span>
+                    <h3>Keys to Success</h3>
+                </div>
+                <div class="guide-content">
+                    <div class="success-keys">
+                        <div class="success-key">
+                            <div class="key-icon">🎯</div>
+                            <div class="key-text">
+                                <strong>Be Specific</strong>
+                                <span>Plan exact times, not "sometime today"</span>
+                            </div>
+                        </div>
+                        <div class="success-key">
+                            <div class="key-icon">📱</div>
+                            <div class="key-text">
+                                <strong>Log Immediately</strong>
+                                <span>Track right after completing each activity</span>
+                            </div>
+                        </div>
+                        <div class="success-key">
+                            <div class="key-icon">🔥</div>
+                            <div class="key-text">
+                                <strong>Protect Your Streak</strong>
+                                <span>200 makes every day, no exceptions</span>
+                            </div>
+                        </div>
+                        <div class="success-key">
+                            <div class="key-icon">📊</div>
+                            <div class="key-text">
+                                <strong>Review Weekly</strong>
+                                <span>Learn from your data and adjust</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="guide-fixed-schedule">
+                <h4>Your Fixed Schedule (Auto-Tracked)</h4>
+                <div class="fixed-item">
+                    <span class="fixed-dot" style="background: var(--coach);"></span>
+                    <span>Coach Sessions: Mon/Wed/Fri 5-7 AM</span>
+                </div>
+                <div class="fixed-item">
+                    <span class="fixed-dot" style="background: var(--varsity);"></span>
+                    <span>Varsity Practice: Mon-Fri 3:30-5:30 PM</span>
+                </div>
+                <div class="fixed-item">
+                    <span class="fixed-dot" style="background: var(--shooting);"></span>
+                    <span>200 Makes: Every day (you pick the time)</span>
+                </div>
             </div>
         </div>
 
-        <div class="stat-card">
-            <div class="stat-card-header">
-                <span class="stat-card-title">This Week's Completion</span>
+        <!-- STATS VIEW -->
+        <div id="view-stats" class="view">
+            <div class="view-header">
+                <h1 class="view-title">YOUR <span>STATS</span></h1>
             </div>
-            <div style="display: flex; align-items: center; gap: 1.5rem;">
-                <svg class="progress-ring" viewBox="0 0 120 120">
-                    <circle class="bg" cx="60" cy="60" r="52"/>
-                    <circle class="progress" id="completion-ring" cx="60" cy="60" r="52"
-                        stroke-dasharray="327" stroke-dashoffset="327"/>
+
+            <div class="stats-row">
+                <div class="stat-chip">
+                    <div class="value" id="stats-streak">0</div>
+                    <div class="label">Day Streak</div>
+                </div>
+                <div class="stat-chip">
+                    <div class="value" id="stats-total-makes">0</div>
+                    <div class="label">Total Makes</div>
+                </div>
+                <div class="stat-chip">
+                    <div class="value" id="stats-sessions">0</div>
+                    <div class="label">Sessions</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <span class="stat-card-title">This Week's Completion</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 1.5rem;">
+                    <svg class="progress-ring" viewBox="0 0 120 120">
+                        <circle class="bg" cx="60" cy="60" r="52"/>
+                        <circle class="progress" id="completion-ring" cx="60" cy="60" r="52"
+                            stroke-dasharray="327" stroke-dashoffset="327"/>
+                    </svg>
+                    <div>
+                        <div class="stat-big-number" id="week-completion-pct">0<small>%</small></div>
+                        <div style="font-size: 0.8rem; color: var(--text-secondary);">of planned activities</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <span class="stat-card-title">Weekly Makes</span>
+                </div>
+                <div class="weekly-bars" id="weekly-bars"></div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <span class="stat-card-title">Consistency Score</span>
+                </div>
+                <div class="stat-big-number" id="consistency-score">0<small>%</small></div>
+                <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.25rem;">
+                    Activities completed on time
+                </div>
+            </div>
+        </div>
+
+        <!-- BOTTOM NAVIGATION -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" onclick="switchView('today')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12 6 12 12 16 14"/>
                 </svg>
-                <div>
-                    <div class="stat-big-number" id="week-completion-pct">0<small>%</small></div>
-                    <div style="font-size: 0.8rem; color: var(--text-secondary);">of planned activities</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="stat-card">
-            <div class="stat-card-header">
-                <span class="stat-card-title">Weekly Makes</span>
-            </div>
-            <div class="weekly-bars" id="weekly-bars"></div>
-        </div>
-
-        <div class="stat-card">
-            <div class="stat-card-header">
-                <span class="stat-card-title">Consistency Score</span>
-            </div>
-            <div class="stat-big-number" id="consistency-score">0<small>%</small></div>
-            <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.25rem;">
-                Activities completed on time
-            </div>
-        </div>
+                <span>Today</span>
+            </button>
+            <button class="nav-item" onclick="switchView('calendar')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="16" y1="2" x2="16" y2="6"/>
+                    <line x1="8" y1="2" x2="8" y2="6"/>
+                    <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+                <span>Calendar</span>
+            </button>
+            <button class="nav-item" onclick="switchView('plan')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                </svg>
+                <span>Plan</span>
+            </button>
+            <button class="nav-item" onclick="switchView('stats')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="20" x2="18" y2="10"/>
+                    <line x1="12" y1="20" x2="12" y2="4"/>
+                    <line x1="6" y1="20" x2="6" y2="14"/>
+                </svg>
+                <span>Stats</span>
+            </button>
+            <button class="nav-item" onclick="switchView('guide')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                    <line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+                <span>Guide</span>
+            </button>
+        </nav>
     </div>
-
-    <!-- BOTTOM NAVIGATION -->
-    <nav class="bottom-nav">
-        <button class="nav-item active" onclick="switchView('today')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10"/>
-                <polyline points="12 6 12 12 16 14"/>
-            </svg>
-            <span>Today</span>
-        </button>
-        <button class="nav-item" onclick="switchView('calendar')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                <line x1="16" y1="2" x2="16" y2="6"/>
-                <line x1="8" y1="2" x2="8" y2="6"/>
-                <line x1="3" y1="10" x2="21" y2="10"/>
-            </svg>
-            <span>Calendar</span>
-        </button>
-        <button class="nav-item" onclick="switchView('plan')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-            </svg>
-            <span>Plan</span>
-        </button>
-        <button class="nav-item" onclick="switchView('stats')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="18" y1="20" x2="18" y2="10"/>
-                <line x1="12" y1="20" x2="12" y2="4"/>
-                <line x1="6" y1="20" x2="6" y2="14"/>
-            </svg>
-            <span>Stats</span>
-        </button>
-        <button class="nav-item" onclick="switchView('guide')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10"/>
-                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-                <line x1="12" y1="17" x2="12.01" y2="17"/>
-            </svg>
-            <span>Guide</span>
-        </button>
-    </nav>
 
     <!-- ADD ACTIVITY MODAL -->
     <div class="modal-overlay" id="add-activity-modal">
@@ -1508,36 +1741,352 @@
     </div>
 
     <script>
+        // ============ CONFIG ============
+        // Update this URL after deploying to Railway
+        const API_URL = localStorage.getItem('apiUrl') || 'http://localhost:3000/api';
+
         // ============ STATE ============
         let currentView = 'today';
         let currentDate = new Date();
         let selectedDate = new Date();
-        let trainingData = {};
+        let trainingData = {}; // Cache of loaded data
         let selectedActivityType = 'shooting';
         let currentPlanningDate = null;
         let currentCompletingActivity = null;
+        let authToken = localStorage.getItem('authToken');
+        let currentUser = null;
+        let isOnline = navigator.onLine;
+        let pendingSync = [];
 
         // Fixed schedule
         const coachDays = [1, 3, 5]; // Mon, Wed, Fri
         const varsityDays = [1, 2, 3, 4, 5]; // Mon-Fri
 
-        // ============ INITIALIZATION ============
-        function init() {
-            loadData();
-            checkNotificationPermission();
-            renderCurrentView();
-            scheduleNotifications();
-        }
+        // ============ API SERVICE ============
+        const api = {
+            async request(endpoint, options = {}) {
+                const url = `${API_URL}${endpoint}`;
+                const headers = {
+                    'Content-Type': 'application/json',
+                    ...options.headers
+                };
 
-        function loadData() {
-            const saved = localStorage.getItem('ethanTrainingV3');
-            if (saved) {
-                trainingData = JSON.parse(saved);
+                if (authToken) {
+                    headers['Authorization'] = `Bearer ${authToken}`;
+                }
+
+                try {
+                    showSyncIndicator(true);
+                    const response = await fetch(url, {
+                        ...options,
+                        headers
+                    });
+
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        throw new Error(data.error || 'API request failed');
+                    }
+
+                    showSyncIndicator(false);
+                    return data;
+                } catch (err) {
+                    showSyncIndicator(false);
+                    if (!navigator.onLine) {
+                        showOfflineBanner(true);
+                    }
+                    throw err;
+                }
+            },
+
+            // Auth
+            async login(email, password) {
+                return this.request('/auth/login', {
+                    method: 'POST',
+                    body: JSON.stringify({ email, password })
+                });
+            },
+
+            async register(name, email, password) {
+                return this.request('/auth/register', {
+                    method: 'POST',
+                    body: JSON.stringify({ name, email, password })
+                });
+            },
+
+            async getMe() {
+                return this.request('/auth/me');
+            },
+
+            // Training
+            async getTrainingDay(date) {
+                return this.request(`/training/${date}`);
+            },
+
+            async getTrainingRange(start, end) {
+                return this.request(`/training?start=${start}&end=${end}`);
+            },
+
+            async updateTrainingDay(date, data) {
+                return this.request(`/training/${date}`, {
+                    method: 'PUT',
+                    body: JSON.stringify(data)
+                });
+            },
+
+            async addPlannedActivity(date, activity) {
+                return this.request(`/training/${date}/planned`, {
+                    method: 'POST',
+                    body: JSON.stringify(activity)
+                });
+            },
+
+            async removePlannedActivity(date, activityId) {
+                return this.request(`/training/${date}/planned/${activityId}`, {
+                    method: 'DELETE'
+                });
+            },
+
+            async logActualActivity(date, activity) {
+                return this.request(`/training/${date}/actual`, {
+                    method: 'POST',
+                    body: JSON.stringify(activity)
+                });
+            },
+
+            async updateShootingMakes(date, makes) {
+                return this.request(`/training/${date}/shooting`, {
+                    method: 'PUT',
+                    body: JSON.stringify({ makes })
+                });
+            },
+
+            // Stats
+            async getStreak() {
+                return this.request('/stats/streak');
+            },
+
+            async getSummary() {
+                return this.request('/stats/summary');
+            },
+
+            async getWeeklyStats() {
+                return this.request('/stats/weekly');
+            }
+        };
+
+        // ============ INITIALIZATION ============
+        async function init() {
+            // Check online status
+            window.addEventListener('online', () => {
+                isOnline = true;
+                showOfflineBanner(false);
+                syncPendingChanges();
+            });
+            window.addEventListener('offline', () => {
+                isOnline = false;
+                showOfflineBanner(true);
+            });
+
+            // Check if logged in
+            if (authToken) {
+                try {
+                    const { user } = await api.getMe();
+                    currentUser = user;
+                    showApp();
+                    await loadInitialData();
+                } catch (err) {
+                    // Token expired or invalid
+                    logout();
+                }
+            } else {
+                showAuth();
             }
         }
 
-        function saveData() {
-            localStorage.setItem('ethanTrainingV3', JSON.stringify(trainingData));
+        function showAuth() {
+            document.getElementById('auth-screen').classList.remove('hidden');
+            document.getElementById('app-container').classList.remove('visible');
+        }
+
+        function showApp() {
+            document.getElementById('auth-screen').classList.add('hidden');
+            document.getElementById('app-container').classList.add('visible');
+
+            // Update user menu
+            if (currentUser) {
+                document.getElementById('user-menu-btn').textContent = currentUser.name.charAt(0).toUpperCase();
+                document.getElementById('user-name-display').textContent = currentUser.name;
+            }
+
+            checkNotificationPermission();
+        }
+
+        async function loadInitialData() {
+            try {
+                // Load today's data
+                const today = getDateKey(new Date());
+                const dayData = await api.getTrainingDay(today);
+                trainingData[today] = dayData;
+
+                // Load week data for calendar
+                const startOfWeek = new Date();
+                startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
+                const endOfWeek = new Date(startOfWeek);
+                endOfWeek.setDate(endOfWeek.getDate() + 6);
+
+                const weekData = await api.getTrainingRange(
+                    getDateKey(startOfWeek),
+                    getDateKey(endOfWeek)
+                );
+
+                weekData.forEach(day => {
+                    trainingData[day.date] = day;
+                });
+
+                renderCurrentView();
+            } catch (err) {
+                console.error('Failed to load initial data:', err);
+                // Fall back to cached data if available
+                renderCurrentView();
+            }
+        }
+
+        // ============ AUTH HANDLERS ============
+        function showLoginForm() {
+            document.getElementById('login-form').style.display = 'block';
+            document.getElementById('register-form').style.display = 'none';
+            document.getElementById('auth-toggle-login').style.display = 'block';
+            document.getElementById('auth-toggle-register').style.display = 'none';
+            hideAuthError();
+        }
+
+        function showRegisterForm() {
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('register-form').style.display = 'block';
+            document.getElementById('auth-toggle-login').style.display = 'none';
+            document.getElementById('auth-toggle-register').style.display = 'block';
+            hideAuthError();
+        }
+
+        function showAuthError(message) {
+            const el = document.getElementById('auth-error');
+            el.textContent = message;
+            el.classList.add('visible');
+        }
+
+        function hideAuthError() {
+            document.getElementById('auth-error').classList.remove('visible');
+        }
+
+        async function handleLogin() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const btn = document.getElementById('login-btn');
+
+            if (!email || !password) {
+                showAuthError('Please enter email and password');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Signing in...';
+
+            try {
+                const { token, user } = await api.login(email, password);
+                authToken = token;
+                currentUser = user;
+                localStorage.setItem('authToken', token);
+                showApp();
+                await loadInitialData();
+            } catch (err) {
+                showAuthError(err.message);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Sign In';
+            }
+        }
+
+        async function handleRegister() {
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const btn = document.getElementById('register-btn');
+
+            if (!name || !email || !password) {
+                showAuthError('Please fill in all fields');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Creating account...';
+
+            try {
+                const { token, user } = await api.register(name, email, password);
+                authToken = token;
+                currentUser = user;
+                localStorage.setItem('authToken', token);
+                showApp();
+                await loadInitialData();
+            } catch (err) {
+                showAuthError(err.message);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Create Account';
+            }
+        }
+
+        function handleLogout() {
+            logout();
+        }
+
+        function logout() {
+            authToken = null;
+            currentUser = null;
+            trainingData = {};
+            localStorage.removeItem('authToken');
+            showAuth();
+            toggleUserMenu(false);
+        }
+
+        function toggleUserMenu(show) {
+            const dropdown = document.getElementById('user-dropdown');
+            if (show === false) {
+                dropdown.classList.remove('visible');
+            } else {
+                dropdown.classList.toggle('visible');
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('#user-menu-btn') && !e.target.closest('#user-dropdown')) {
+                toggleUserMenu(false);
+            }
+        });
+
+        // ============ SYNC & OFFLINE ============
+        function showSyncIndicator(syncing) {
+            const el = document.getElementById('sync-indicator');
+            el.classList.toggle('syncing', syncing);
+        }
+
+        function showOfflineBanner(show) {
+            document.getElementById('offline-banner').classList.toggle('visible', show);
+        }
+
+        async function syncPendingChanges() {
+            // Process any pending changes made while offline
+            while (pendingSync.length > 0) {
+                const action = pendingSync.shift();
+                try {
+                    await action();
+                } catch (err) {
+                    console.error('Failed to sync:', err);
+                    pendingSync.unshift(action); // Put it back
+                    break;
+                }
+            }
         }
 
         // ============ DATE HELPERS ============
@@ -1549,7 +2098,9 @@
         function getDayData(date) {
             const key = getDateKey(date);
             if (!trainingData[key]) {
+                // Return default structure
                 trainingData[key] = {
+                    date: key,
                     isGameDay: false,
                     planned: { shooting: null, pickupRuns: [], custom: [] },
                     actual: {
@@ -1561,21 +2112,6 @@
                         coachWeights: false,
                         varsity: false
                     }
-                };
-            }
-            // Ensure planned structure exists
-            if (!trainingData[key].planned) {
-                trainingData[key].planned = { shooting: null, pickupRuns: [], custom: [] };
-            }
-            if (!trainingData[key].actual) {
-                trainingData[key].actual = {
-                    shootingMakes: 0,
-                    shootingCompletedAt: null,
-                    pickupRuns: [],
-                    custom: [],
-                    coachSkills: false,
-                    coachWeights: false,
-                    varsity: false
                 };
             }
             return trainingData[key];
@@ -1601,24 +2137,45 @@
             renderCurrentView();
         }
 
-        function renderCurrentView() {
+        async function renderCurrentView() {
             switch(currentView) {
-                case 'today': renderTodayView(); break;
-                case 'calendar': renderCalendarView(); break;
-                case 'plan': renderPlanView(); break;
-                case 'stats': renderStatsView(); break;
+                case 'today': await renderTodayView(); break;
+                case 'calendar': await renderCalendarView(); break;
+                case 'plan': await renderPlanView(); break;
+                case 'stats': await renderStatsView(); break;
             }
         }
 
         // ============ TODAY VIEW ============
-        function renderTodayView() {
+        async function renderTodayView() {
             const today = new Date();
+            const todayKey = getDateKey(today);
+
+            // Fetch fresh data if online
+            if (isOnline && authToken) {
+                try {
+                    const dayData = await api.getTrainingDay(todayKey);
+                    trainingData[todayKey] = dayData;
+                } catch (err) {
+                    console.error('Failed to fetch today:', err);
+                }
+            }
+
             const dayData = getDayData(today);
             const dow = today.getDay();
 
+            // Fetch streak
+            let streak = 0;
+            if (isOnline && authToken) {
+                try {
+                    const { streak: s } = await api.getStreak();
+                    streak = s;
+                } catch (err) {}
+            }
+
             // Update stats
-            document.getElementById('today-streak').textContent = calculateStreak();
-            document.getElementById('today-makes').textContent = dayData.actual.shootingMakes || 0;
+            document.getElementById('today-streak').textContent = streak;
+            document.getElementById('today-makes').textContent = dayData.actual?.shootingMakes || 0;
             document.getElementById('today-completion').textContent = calculateDayCompletion(today) + '%';
 
             const container = document.getElementById('today-schedule');
@@ -1650,15 +2207,15 @@
             // Coach sessions
             if (hasCoach) {
                 html += renderFixedBlock('Basketball Skills', '5:00 - 6:00 AM', 'coach',
-                    dayData.actual.coachSkills, () => toggleFixed('coachSkills'));
+                    dayData.actual?.coachSkills, 'coachSkills');
                 html += renderFixedBlock('Weight Training', '6:00 - 7:00 AM', 'coach',
-                    dayData.actual.coachWeights, () => toggleFixed('coachWeights'));
+                    dayData.actual?.coachWeights, 'coachWeights');
             }
 
             // Varsity
             if (hasVarsity) {
                 html += renderFixedBlock('Varsity Practice', '3:30 - 5:30 PM', 'varsity',
-                    dayData.actual.varsity, () => toggleFixed('varsity'));
+                    dayData.actual?.varsity, 'varsity');
             }
 
             // Game day notice
@@ -1680,24 +2237,24 @@
             html += renderShootingBlock(dayData);
 
             // Planned pickup runs
-            if (dayData.planned.pickupRuns && dayData.planned.pickupRuns.length > 0) {
+            if (dayData.planned?.pickupRuns && dayData.planned.pickupRuns.length > 0) {
                 dayData.planned.pickupRuns.forEach((run, idx) => {
-                    const actual = dayData.actual.pickupRuns?.[idx];
-                    html += renderPlannedActivity('Pickup Run', run.location, run.time, actual, 'pickup', idx);
+                    const actual = dayData.actual?.pickupRuns?.[idx];
+                    html += renderPlannedActivity('Pickup Run', run.location, run.time, actual, 'pickup', idx, run.id);
                 });
             }
 
             // Planned custom activities
-            if (dayData.planned.custom && dayData.planned.custom.length > 0) {
+            if (dayData.planned?.custom && dayData.planned.custom.length > 0) {
                 dayData.planned.custom.forEach((activity, idx) => {
-                    const actual = dayData.actual.custom?.[idx];
-                    html += renderPlannedActivity(activity.name, '', activity.time, actual, 'custom', idx);
+                    const actual = dayData.actual?.custom?.[idx];
+                    html += renderPlannedActivity(activity.name, '', activity.time, actual, 'custom', idx, activity.id);
                 });
             }
 
             // Add activity button
             html += `
-                <button class="add-activity-btn" onclick="openAddActivityModal('${getDateKey(today)}')">
+                <button class="add-activity-btn" onclick="openAddActivityModal('${todayKey}')">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
                     </svg>
@@ -1708,7 +2265,7 @@
             container.innerHTML = html;
         }
 
-        function renderFixedBlock(title, time, type, completed, onToggle) {
+        function renderFixedBlock(title, time, type, completed, toggleType) {
             return `
                 <div class="training-block ${completed ? '' : 'fixed'}">
                     <div class="block-header">
@@ -1717,7 +2274,7 @@
                             <div class="block-title">${title}</div>
                             <div class="block-time">${time}</div>
                         </div>
-                        <div class="block-check ${completed ? 'checked' : ''}" onclick="${onToggle.toString().match(/toggleFixed\('[^']+'\)/)[0]}">
+                        <div class="block-check ${completed ? 'checked' : ''}" onclick="toggleFixed('${toggleType}')">
                             <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
                                 <polyline points="20 6 9 17 4 12"/>
                             </svg>
@@ -1728,10 +2285,10 @@
         }
 
         function renderShootingBlock(dayData) {
-            const planned = dayData.planned.shooting;
-            const makes = dayData.actual.shootingMakes || 0;
+            const planned = dayData.planned?.shooting;
+            const makes = dayData.actual?.shootingMakes || 0;
             const completed = makes >= 200;
-            const actualTime = dayData.actual.shootingCompletedAt;
+            const actualTime = dayData.actual?.shootingCompletedAt;
 
             let statusHtml = '';
             if (planned) {
@@ -1776,7 +2333,7 @@
             `;
         }
 
-        function renderPlannedActivity(title, subtitle, plannedTime, actual, type, idx) {
+        function renderPlannedActivity(title, subtitle, plannedTime, actual, type, idx, activityId) {
             const completed = actual && actual.completedAt;
             let statusHtml = '';
 
@@ -1818,7 +2375,7 @@
         }
 
         // ============ CALENDAR VIEW ============
-        function renderCalendarView() {
+        async function renderCalendarView() {
             const grid = document.getElementById('calendar-grid');
             const monthLabel = document.getElementById('calendar-month');
             const year = currentDate.getFullYear();
@@ -1838,6 +2395,21 @@
             const firstDay = new Date(year, month, 1).getDay();
             const daysInMonth = new Date(year, month + 1, 0).getDate();
             const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+            // Load month data
+            if (isOnline && authToken) {
+                try {
+                    const startDate = new Date(year, month, 1);
+                    const endDate = new Date(year, month + 1, 0);
+                    const monthData = await api.getTrainingRange(
+                        getDateKey(startDate),
+                        getDateKey(endDate)
+                    );
+                    monthData.forEach(day => {
+                        trainingData[day.date] = day;
+                    });
+                } catch (err) {}
+            }
 
             // Previous month
             for (let i = firstDay - 1; i >= 0; i--) {
@@ -1871,9 +2443,9 @@
             if (dayData.isGameDay) cell.classList.add('game-day');
 
             // Calculate dots
-            const hasPlanned = dayData.planned.shooting ||
-                (dayData.planned.pickupRuns && dayData.planned.pickupRuns.length > 0) ||
-                (dayData.planned.custom && dayData.planned.custom.length > 0);
+            const hasPlanned = dayData.planned?.shooting ||
+                (dayData.planned?.pickupRuns && dayData.planned.pickupRuns.length > 0) ||
+                (dayData.planned?.custom && dayData.planned.custom.length > 0);
             const completion = calculateDayCompletion(date);
 
             let dotsHtml = '<div class="day-dots">';
@@ -1911,7 +2483,7 @@
                 html += `<div style="padding: 0.5rem 0; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; gap: 0.5rem;">
                     <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--coach);"></div>
                     <span style="font-size: 0.85rem;">Coach Session 5-7 AM</span>
-                    ${dayData.actual.coachSkills && dayData.actual.coachWeights ? '<span style="margin-left: auto; color: var(--success);">✓</span>' : ''}
+                    ${dayData.actual?.coachSkills && dayData.actual?.coachWeights ? '<span style="margin-left: auto; color: var(--success);">✓</span>' : ''}
                 </div>`;
             }
 
@@ -1919,7 +2491,7 @@
                 html += `<div style="padding: 0.5rem 0; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; gap: 0.5rem;">
                     <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--varsity);"></div>
                     <span style="font-size: 0.85rem;">Varsity 3:30-5:30 PM</span>
-                    ${dayData.actual.varsity ? '<span style="margin-left: auto; color: var(--success);">✓</span>' : ''}
+                    ${dayData.actual?.varsity ? '<span style="margin-left: auto; color: var(--success);">✓</span>' : ''}
                 </div>`;
             }
 
@@ -1927,15 +2499,15 @@
             html += `<div style="padding: 0.5rem 0; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; gap: 0.5rem;">
                 <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--shooting);"></div>
                 <span style="font-size: 0.85rem;">200 Makes</span>
-                <span style="margin-left: auto; font-size: 0.85rem; color: ${(dayData.actual.shootingMakes || 0) >= 200 ? 'var(--success)' : 'var(--text-muted)'};">
-                    ${dayData.actual.shootingMakes || 0}/200
+                <span style="margin-left: auto; font-size: 0.85rem; color: ${(dayData.actual?.shootingMakes || 0) >= 200 ? 'var(--success)' : 'var(--text-muted)'};">
+                    ${dayData.actual?.shootingMakes || 0}/200
                 </span>
             </div>`;
 
             // Planned activities
-            if (dayData.planned.pickupRuns) {
+            if (dayData.planned?.pickupRuns) {
                 dayData.planned.pickupRuns.forEach((run, idx) => {
-                    const completed = dayData.actual.pickupRuns?.[idx]?.completedAt;
+                    const completed = dayData.actual?.pickupRuns?.[idx]?.completedAt;
                     html += `<div style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
                         <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--pickup);"></div>
                         <span style="font-size: 0.85rem;">Pickup @ ${run.location}</span>
@@ -1961,17 +2533,33 @@
         }
 
         // ============ PLAN WEEK VIEW ============
-        function renderPlanView() {
+        async function renderPlanView() {
             const container = document.getElementById('week-planner');
             const today = new Date();
             const startOfWeek = new Date(today);
             startOfWeek.setDate(today.getDate() - today.getDay());
+
+            // Load week data
+            if (isOnline && authToken) {
+                try {
+                    const endOfWeek = new Date(startOfWeek);
+                    endOfWeek.setDate(endOfWeek.getDate() + 6);
+                    const weekData = await api.getTrainingRange(
+                        getDateKey(startOfWeek),
+                        getDateKey(endOfWeek)
+                    );
+                    weekData.forEach(day => {
+                        trainingData[day.date] = day;
+                    });
+                } catch (err) {}
+            }
 
             let html = '';
 
             for (let i = 0; i < 7; i++) {
                 const date = new Date(startOfWeek);
                 date.setDate(startOfWeek.getDate() + i);
+                const dateKey = getDateKey(date);
                 const dayData = getDayData(date);
                 const dow = date.getDay();
                 const isToday = date.toDateString() === today.toDateString();
@@ -2012,44 +2600,44 @@
                 html += '<div class="planned-events">';
 
                 // Shooting
-                if (dayData.planned.shooting) {
+                if (dayData.planned?.shooting) {
                     html += `<div class="planned-event" style="border-left-color: var(--shooting);">
                         <div class="planned-event-info">
                             <span class="planned-event-time">${formatTime(dayData.planned.shooting.time)}</span>
                             <span class="planned-event-name">200 Makes</span>
                         </div>
-                        <button class="planned-event-remove" onclick="removePlannedActivity('${getDateKey(date)}', 'shooting', 0)">✕</button>
+                        <button class="planned-event-remove" onclick="removePlannedActivity('${dateKey}', '${dayData.planned.shooting.id}')">✕</button>
                     </div>`;
                 }
 
                 // Pickup runs
-                if (dayData.planned.pickupRuns) {
-                    dayData.planned.pickupRuns.forEach((run, idx) => {
+                if (dayData.planned?.pickupRuns) {
+                    dayData.planned.pickupRuns.forEach((run) => {
                         html += `<div class="planned-event" style="border-left-color: var(--pickup);">
                             <div class="planned-event-info">
                                 <span class="planned-event-time">${formatTime(run.time)}</span>
                                 <span class="planned-event-name">Pickup @ ${run.location}</span>
                             </div>
-                            <button class="planned-event-remove" onclick="removePlannedActivity('${getDateKey(date)}', 'pickup', ${idx})">✕</button>
+                            <button class="planned-event-remove" onclick="removePlannedActivity('${dateKey}', '${run.id}')">✕</button>
                         </div>`;
                     });
                 }
 
                 // Custom
-                if (dayData.planned.custom) {
-                    dayData.planned.custom.forEach((activity, idx) => {
+                if (dayData.planned?.custom) {
+                    dayData.planned.custom.forEach((activity) => {
                         html += `<div class="planned-event" style="border-left-color: var(--custom);">
                             <div class="planned-event-info">
                                 <span class="planned-event-time">${formatTime(activity.time)}</span>
                                 <span class="planned-event-name">${activity.name}</span>
                             </div>
-                            <button class="planned-event-remove" onclick="removePlannedActivity('${getDateKey(date)}', 'custom', ${idx})">✕</button>
+                            <button class="planned-event-remove" onclick="removePlannedActivity('${dateKey}', '${activity.id}')">✕</button>
                         </div>`;
                     });
                 }
 
                 html += `
-                    <button class="add-activity-btn" onclick="openAddActivityModal('${getDateKey(date)}')">
+                    <button class="add-activity-btn" onclick="openAddActivityModal('${dateKey}')">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
                         </svg>
@@ -2067,82 +2655,64 @@
         }
 
         // ============ STATS VIEW ============
-        function renderStatsView() {
-            // Basic stats
-            document.getElementById('stats-streak').textContent = calculateStreak();
-            document.getElementById('stats-total-makes').textContent = calculateTotalMakes().toLocaleString();
-            document.getElementById('stats-sessions').textContent = calculateTotalSessions();
+        async function renderStatsView() {
+            if (isOnline && authToken) {
+                try {
+                    // Fetch stats from API
+                    const [summary, weekly] = await Promise.all([
+                        api.getSummary(),
+                        api.getWeeklyStats()
+                    ]);
 
-            // Weekly completion
-            const weekCompletion = calculateWeekCompletion();
-            document.getElementById('week-completion-pct').innerHTML = `${weekCompletion}<small>%</small>`;
-            const ring = document.getElementById('completion-ring');
-            const offset = 327 - (327 * weekCompletion / 100);
-            ring.style.strokeDashoffset = offset;
+                    // Basic stats
+                    document.getElementById('stats-streak').textContent = summary.streak || 0;
+                    document.getElementById('stats-total-makes').textContent = (summary.totalMakes || 0).toLocaleString();
+                    document.getElementById('stats-sessions').textContent = summary.totalSessions || 0;
 
-            // Weekly bars
-            const barsContainer = document.getElementById('weekly-bars');
-            const today = new Date();
-            const dayLabels = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-            let barsHtml = '';
+                    // Weekly completion
+                    const weekCompletion = weekly.completionPercentage || 0;
+                    document.getElementById('week-completion-pct').innerHTML = `${weekCompletion}<small>%</small>`;
+                    const ring = document.getElementById('completion-ring');
+                    const offset = 327 - (327 * weekCompletion / 100);
+                    ring.style.strokeDashoffset = offset;
 
-            for (let i = 6; i >= 0; i--) {
-                const date = new Date(today);
-                date.setDate(today.getDate() - i);
-                const dayData = getDayData(date);
-                const makes = dayData.actual.shootingMakes || 0;
-                const height = Math.min(80, (makes / 200) * 80);
+                    // Weekly bars
+                    const barsContainer = document.getElementById('weekly-bars');
+                    const dayLabels = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+                    let barsHtml = '';
 
-                barsHtml += `<div class="weekly-bar">
-                    <div class="bar-fill" style="height: ${height}px;"></div>
-                    <span class="bar-label">${dayLabels[date.getDay()]}</span>
-                </div>`;
+                    weekly.dailyStats.forEach(day => {
+                        const makes = day.makes || 0;
+                        const height = Math.min(80, (makes / 200) * 80);
+                        barsHtml += `<div class="weekly-bar">
+                            <div class="bar-fill" style="height: ${height}px;"></div>
+                            <span class="bar-label">${dayLabels[day.dayOfWeek]}</span>
+                        </div>`;
+                    });
+                    barsContainer.innerHTML = barsHtml;
+
+                    // Consistency score
+                    document.getElementById('consistency-score').innerHTML = `${weekly.consistencyScore || 0}<small>%</small>`;
+
+                } catch (err) {
+                    console.error('Failed to load stats:', err);
+                    renderOfflineStats();
+                }
+            } else {
+                renderOfflineStats();
             }
-            barsContainer.innerHTML = barsHtml;
+        }
 
-            // Consistency score
-            document.getElementById('consistency-score').innerHTML = `${calculateConsistencyScore()}<small>%</small>`;
+        function renderOfflineStats() {
+            // Show cached/local stats when offline
+            document.getElementById('stats-streak').textContent = '—';
+            document.getElementById('stats-total-makes').textContent = '—';
+            document.getElementById('stats-sessions').textContent = '—';
+            document.getElementById('week-completion-pct').innerHTML = `—<small>%</small>`;
+            document.getElementById('consistency-score').innerHTML = `—<small>%</small>`;
         }
 
         // ============ CALCULATIONS ============
-        function calculateStreak() {
-            let streak = 0;
-            const today = new Date();
-            for (let i = 0; i < 365; i++) {
-                const date = new Date(today);
-                date.setDate(today.getDate() - i);
-                const dayData = getDayData(date);
-                if ((dayData.actual.shootingMakes || 0) >= 200) {
-                    streak++;
-                } else if (i > 0) {
-                    break;
-                }
-            }
-            return streak;
-        }
-
-        function calculateTotalMakes() {
-            let total = 0;
-            for (const key in trainingData) {
-                total += trainingData[key].actual?.shootingMakes || 0;
-            }
-            return total;
-        }
-
-        function calculateTotalSessions() {
-            let total = 0;
-            for (const key in trainingData) {
-                const day = trainingData[key];
-                if (day.actual) {
-                    if (day.actual.coachSkills) total++;
-                    if (day.actual.coachWeights) total++;
-                    if (day.actual.varsity) total++;
-                    total += (day.actual.pickupRuns?.filter(r => r.completedAt)?.length || 0);
-                }
-            }
-            return total;
-        }
-
         function calculateDayCompletion(date) {
             const dayData = getDayData(date);
             const dow = new Date(date).getDay();
@@ -2150,119 +2720,105 @@
             let completed = 0;
 
             // Shooting
-            if ((dayData.actual.shootingMakes || 0) >= 200) completed++;
+            if ((dayData.actual?.shootingMakes || 0) >= 200) completed++;
 
             // Coach
             if (coachDays.includes(dow) && !dayData.isGameDay) {
                 planned += 2;
-                if (dayData.actual.coachSkills) completed++;
-                if (dayData.actual.coachWeights) completed++;
+                if (dayData.actual?.coachSkills) completed++;
+                if (dayData.actual?.coachWeights) completed++;
             }
 
             // Varsity
             if (varsityDays.includes(dow) && !dayData.isGameDay) {
                 planned++;
-                if (dayData.actual.varsity) completed++;
+                if (dayData.actual?.varsity) completed++;
             }
 
             // Planned pickups
-            if (dayData.planned.pickupRuns) {
+            if (dayData.planned?.pickupRuns) {
                 planned += dayData.planned.pickupRuns.length;
-                completed += (dayData.actual.pickupRuns?.filter(r => r.completedAt)?.length || 0);
+                completed += (dayData.actual?.pickupRuns?.filter(r => r.completedAt)?.length || 0);
             }
 
             // Planned custom
-            if (dayData.planned.custom) {
+            if (dayData.planned?.custom) {
                 planned += dayData.planned.custom.length;
-                completed += (dayData.actual.custom?.filter(c => c.completedAt)?.length || 0);
+                completed += (dayData.actual?.custom?.filter(c => c.completedAt)?.length || 0);
             }
 
             return planned > 0 ? Math.round((completed / planned) * 100) : 0;
         }
 
-        function calculateWeekCompletion() {
-            const today = new Date();
-            const startOfWeek = new Date(today);
-            startOfWeek.setDate(today.getDate() - today.getDay());
-
-            let totalCompletion = 0;
-            let daysWithData = 0;
-
-            for (let i = 0; i < 7; i++) {
-                const date = new Date(startOfWeek);
-                date.setDate(startOfWeek.getDate() + i);
-                if (date <= today) {
-                    totalCompletion += calculateDayCompletion(date);
-                    daysWithData++;
-                }
-            }
-
-            return daysWithData > 0 ? Math.round(totalCompletion / daysWithData) : 0;
-        }
-
-        function calculateConsistencyScore() {
-            let onTime = 0;
-            let total = 0;
-
-            for (const key in trainingData) {
-                const day = trainingData[key];
-                if (day.planned && day.actual) {
-                    // Check shooting
-                    if (day.planned.shooting && day.actual.shootingCompletedAt) {
-                        total++;
-                        if (Math.abs(getTimeDiffMinutes(day.planned.shooting.time, day.actual.shootingCompletedAt)) <= 30) {
-                            onTime++;
-                        }
-                    }
-
-                    // Check pickups
-                    if (day.planned.pickupRuns && day.actual.pickupRuns) {
-                        day.planned.pickupRuns.forEach((planned, idx) => {
-                            if (day.actual.pickupRuns[idx]?.completedAt) {
-                                total++;
-                                if (Math.abs(getTimeDiffMinutes(planned.time, day.actual.pickupRuns[idx].completedAt)) <= 30) {
-                                    onTime++;
-                                }
-                            }
-                        });
-                    }
-                }
-            }
-
-            return total > 0 ? Math.round((onTime / total) * 100) : 0;
-        }
-
         // ============ ACTIONS ============
-        function toggleGameDay() {
+        async function toggleGameDay() {
             const today = new Date();
+            const todayKey = getDateKey(today);
             const dayData = getDayData(today);
-            dayData.isGameDay = !dayData.isGameDay;
-            saveData();
+            const newValue = !dayData.isGameDay;
+
+            // Optimistic update
+            dayData.isGameDay = newValue;
             renderTodayView();
-        }
 
-        function toggleFixed(type) {
-            const today = new Date();
-            const dayData = getDayData(today);
-            dayData.actual[type] = !dayData.actual[type];
-            saveData();
-            renderTodayView();
-        }
-
-        function adjustMakes(amount) {
-            const today = new Date();
-            const dayData = getDayData(today);
-            const newValue = Math.max(0, (dayData.actual.shootingMakes || 0) + amount);
-            dayData.actual.shootingMakes = newValue;
-
-            // Auto-set completion time when reaching 200
-            if (newValue >= 200 && !dayData.actual.shootingCompletedAt) {
-                const now = new Date();
-                dayData.actual.shootingCompletedAt = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+            if (isOnline && authToken) {
+                try {
+                    await api.updateTrainingDay(todayKey, { isGameDay: newValue });
+                } catch (err) {
+                    // Revert on error
+                    dayData.isGameDay = !newValue;
+                    renderTodayView();
+                }
             }
+        }
 
-            saveData();
+        async function toggleFixed(type) {
+            const today = new Date();
+            const todayKey = getDateKey(today);
+            const dayData = getDayData(today);
+
+            // Map type to API type
+            const apiType = type === 'coachSkills' ? 'coach_skills' :
+                           type === 'coachWeights' ? 'coach_weights' : type;
+
+            // Optimistic update
+            if (!dayData.actual) dayData.actual = {};
+            dayData.actual[type] = !dayData.actual[type];
             renderTodayView();
+
+            if (isOnline && authToken) {
+                try {
+                    await api.logActualActivity(todayKey, { type: apiType });
+                } catch (err) {
+                    // Revert on error
+                    dayData.actual[type] = !dayData.actual[type];
+                    renderTodayView();
+                }
+            }
+        }
+
+        async function adjustMakes(amount) {
+            const today = new Date();
+            const todayKey = getDateKey(today);
+            const dayData = getDayData(today);
+
+            if (!dayData.actual) dayData.actual = {};
+            const newValue = Math.max(0, (dayData.actual.shootingMakes || 0) + amount);
+
+            // Optimistic update
+            dayData.actual.shootingMakes = newValue;
+            renderTodayView();
+
+            if (isOnline && authToken) {
+                try {
+                    const result = await api.updateShootingMakes(todayKey, newValue);
+                    trainingData[todayKey] = result;
+                } catch (err) {
+                    // Revert on error
+                    dayData.actual.shootingMakes = newValue - amount;
+                    renderTodayView();
+                }
+            }
         }
 
         // ============ MODALS ============
@@ -2290,41 +2846,40 @@
             document.getElementById('custom-name-group').style.display = type === 'custom' ? 'block' : 'none';
         }
 
-        function saveActivity() {
+        async function saveActivity() {
             const time = document.getElementById('activity-time').value;
-            const dayData = getDayData(new Date(currentPlanningDate + 'T12:00:00'));
+            const location = document.getElementById('activity-location').value;
+            const name = document.getElementById('activity-name').value || 'Custom Activity';
 
-            if (selectedActivityType === 'shooting') {
-                dayData.planned.shooting = { time };
-            } else if (selectedActivityType === 'pickup') {
-                const location = document.getElementById('activity-location').value;
-                if (!dayData.planned.pickupRuns) dayData.planned.pickupRuns = [];
-                dayData.planned.pickupRuns.push({ time, location });
-            } else if (selectedActivityType === 'custom') {
-                const name = document.getElementById('activity-name').value || 'Custom Activity';
-                if (!dayData.planned.custom) dayData.planned.custom = [];
-                dayData.planned.custom.push({ time, name });
-            }
-
-            saveData();
             closeAddActivityModal();
-            scheduleNotifications();
-            renderCurrentView();
+
+            if (isOnline && authToken) {
+                try {
+                    const result = await api.addPlannedActivity(currentPlanningDate, {
+                        type: selectedActivityType,
+                        time,
+                        location: selectedActivityType === 'pickup' ? location : undefined,
+                        name: selectedActivityType === 'custom' ? name : undefined
+                    });
+                    trainingData[currentPlanningDate] = result;
+                    renderCurrentView();
+                } catch (err) {
+                    console.error('Failed to save activity:', err);
+                    alert('Failed to save activity. Please try again.');
+                }
+            }
         }
 
-        function removePlannedActivity(dateKey, type, idx) {
-            const dayData = getDayData(new Date(dateKey + 'T12:00:00'));
-
-            if (type === 'shooting') {
-                dayData.planned.shooting = null;
-            } else if (type === 'pickup') {
-                dayData.planned.pickupRuns.splice(idx, 1);
-            } else if (type === 'custom') {
-                dayData.planned.custom.splice(idx, 1);
+        async function removePlannedActivity(dateKey, activityId) {
+            if (isOnline && authToken) {
+                try {
+                    const result = await api.removePlannedActivity(dateKey, activityId);
+                    trainingData[dateKey] = result;
+                    renderCurrentView();
+                } catch (err) {
+                    console.error('Failed to remove activity:', err);
+                }
             }
-
-            saveData();
-            renderCurrentView();
         }
 
         function openCompleteModal(type, idx) {
@@ -2339,23 +2894,26 @@
             document.getElementById('complete-activity-modal').classList.remove('active');
         }
 
-        function confirmCompletion() {
+        async function confirmCompletion() {
             const time = document.getElementById('completion-time').value;
             const today = new Date();
-            const dayData = getDayData(today);
+            const todayKey = getDateKey(today);
             const { type, idx } = currentCompletingActivity;
 
-            if (type === 'pickup') {
-                if (!dayData.actual.pickupRuns) dayData.actual.pickupRuns = [];
-                dayData.actual.pickupRuns[idx] = { completedAt: time };
-            } else if (type === 'custom') {
-                if (!dayData.actual.custom) dayData.actual.custom = [];
-                dayData.actual.custom[idx] = { completedAt: time };
-            }
-
-            saveData();
             closeCompleteModal();
-            renderTodayView();
+
+            if (isOnline && authToken) {
+                try {
+                    const result = await api.logActualActivity(todayKey, {
+                        type,
+                        completedAt: time
+                    });
+                    trainingData[todayKey] = result;
+                    renderTodayView();
+                } catch (err) {
+                    console.error('Failed to log completion:', err);
+                }
+            }
         }
 
         // ============ NOTIFICATIONS ============
@@ -2369,17 +2927,8 @@
             if ('Notification' in window) {
                 Notification.requestPermission().then(permission => {
                     document.getElementById('notification-banner').classList.add('hidden');
-                    if (permission === 'granted') {
-                        scheduleNotifications();
-                    }
                 });
             }
-        }
-
-        function scheduleNotifications() {
-            // This would integrate with service worker for real notifications
-            // For now, just a placeholder
-            console.log('Notifications scheduled');
         }
 
         // ============ SERVICE WORKER ============

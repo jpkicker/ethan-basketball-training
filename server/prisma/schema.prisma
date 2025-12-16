@@ -1,0 +1,76 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String        @id @default(uuid())
+  email        String        @unique
+  passwordHash String        @map("password_hash")
+  name         String
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+  trainingDays TrainingDay[]
+
+  @@map("users")
+}
+
+model TrainingDay {
+  id                String             @id @default(uuid())
+  userId            String             @map("user_id")
+  date              DateTime           @db.Date
+  isGameDay         Boolean            @default(false) @map("is_game_day")
+  createdAt         DateTime           @default(now()) @map("created_at")
+  updatedAt         DateTime           @updatedAt @map("updated_at")
+  user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plannedActivities PlannedActivity[]
+  actualActivities  ActualActivity[]
+
+  @@unique([userId, date])
+  @@map("training_days")
+}
+
+enum ActivityType {
+  shooting
+  pickup
+  custom
+}
+
+model PlannedActivity {
+  id            String       @id @default(uuid())
+  trainingDayId String       @map("training_day_id")
+  type          ActivityType
+  plannedTime   String       @map("planned_time") // Store as HH:MM string
+  location      String?      // For pickup runs
+  name          String?      // For custom activities
+  createdAt     DateTime     @default(now()) @map("created_at")
+  trainingDay   TrainingDay  @relation(fields: [trainingDayId], references: [id], onDelete: Cascade)
+
+  @@map("planned_activities")
+}
+
+enum ActualActivityType {
+  shooting
+  pickup
+  custom
+  coach_skills
+  coach_weights
+  varsity
+}
+
+model ActualActivity {
+  id            String             @id @default(uuid())
+  trainingDayId String             @map("training_day_id")
+  type          ActualActivityType
+  completedAt   String?            @map("completed_at") // Store as HH:MM string
+  shootingMakes Int?               @map("shooting_makes") // Only for shooting type
+  createdAt     DateTime           @default(now()) @map("created_at")
+  updatedAt     DateTime           @updatedAt @map("updated_at")
+  trainingDay   TrainingDay        @relation(fields: [trainingDayId], references: [id], onDelete: Cascade)
+
+  @@map("actual_activities")
+}
