@@ -11,9 +11,9 @@ const app = express();
 const prisma = new PrismaClient();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
+// Middleware - Allow all origins for this app
 app.use(cors({
-  origin: process.env.FRONTEND_URL || '*',
+  origin: true,
   credentials: true
 }));
 app.use(express.json());
